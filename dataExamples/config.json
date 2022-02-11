@@ -1,0 +1,114 @@
+{
+  "deviceName": "development",
+  "scene": {
+    "active": "csNone",
+    "steps_ms": 5,
+    "pause_ms": 100
+  },
+  "debug": {
+    "pin": 16,
+    "pinName": "D0",
+    "enabled": true,
+    "baudrate": 115200
+  },
+  "wifi": {
+    "ssid": "AnSSID",
+    "passphrase": "aWiFiPassPhraseForWPAorSomethingElse",
+    "mode": "client",
+    "restport": 8080,
+    "httpport": 80,
+    "httprefreshrate": 5,
+    "dhcp": true,
+    "ipaddress": "255.255.255.255",
+    "netmask": "255.255.255.255",
+    "gateway": "255.255.255.255",
+    "username": "admin",
+    "password": "admin"
+  },
+  "outputs": [
+    {
+      "value": 0,
+      "name": "PWM1",
+      "pin": 4,
+      "pinName": "D2",
+      "type": "pwm",
+      "sceneDirection": 0
+    },
+    {
+      "value": 0,
+      "name": "PWM2",
+      "pin": 0,
+      "pinName": "D3",
+      "type": "pwm",
+      "sceneDirection": 0
+    },
+    {
+      "value": 0,
+      "name": "PWM3",
+      "pin": 2,
+      "pinName": "D4",
+      "type": "pwm",
+      "sceneDirection": 0
+    },
+    {
+      "value": 0,
+      "name": "PWM4",
+      "pin": 14,
+      "pinName": "D5",
+      "type": "pwm",
+      "sceneDirection": 0
+    },
+    {
+      "value": 0,
+      "name": "PWM5",
+      "pin": 12,
+      "pinName": "D6",
+      "type": "pwm",
+      "sceneDirection": 0
+    },
+    {
+      "value": 0,
+      "name": "PWM6",
+      "pin": 13,
+      "pinName": "D7",
+      "type": "pwm",
+      "sceneDirection": 0
+    },
+    {
+      "value": 0,
+      "name": "LED1",
+      "pin": 5,
+      "pinName": "D1",
+      "type": "led",
+      "sceneDirection": 0
+    }
+  ],
+  "sensors": [
+    {
+      "value": 0,
+      "name": "sensor1",
+      "pin": 17,
+      "pinName": "A0",
+      "type": "analog",
+      "hysteresis": 10,
+      "minvalue": 0,
+      "maxvalue": 1024,
+      "minremap": 0,
+      "maxremap": 255,
+      "multiplier": 1
+    },
+    {
+      "value": 0,
+      "name": "button1",
+      "pin": 15,
+      "pinName": "D8",
+      "type": "digital",
+      "hysteresis": 0,
+      "minvalue": 0,
+      "maxvalue": 0,
+      "minremap": 0,
+      "maxremap": 0,
+      "multiplier": 1
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+[
+    {
+      "value": 0,
+      "name": "sensor1",
+      "pin": 17,
+      "pinName": "A0",
+      "type": "analog",
+      "hysteresis": 10,
+      "minvalue": 0,
+      "maxvalue": 1024,
+      "minremap": 0,
+      "maxremap": 255,
+      "multiplier": 1
+    },
+    {
+      "value": 0,
+      "name": "button1",
+      "pin": 15,
+      "pinName": "D8",
+      "type": "digital",
+      "hysteresis": 0,
+      "minvalue": 0,
+      "maxvalue": 0,
+      "minremap": 0,
+      "maxremap": 0,
+      "multiplier": 1
+    }
+  ]

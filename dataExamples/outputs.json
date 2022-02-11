@@ -1,0 +1,58 @@
+[
+  {
+    "value": 0,
+    "name": "PWM1",
+    "pin": 4,
+    "pinName": "D2",
+    "type": "pwm",
+    "sceneDirection": 0
+  },
+  {
+    "value": 0,
+    "name": "PWM2",
+    "pin": 0,
+    "pinName": "D3",
+    "type": "pwm",
+    "sceneDirection": 0
+  },
+  {
+    "value": 0,
+    "name": "PWM3",
+    "pin": 2,
+    "pinName": "D4",
+    "type": "pwm",
+    "sceneDirection": 0
+  },
+  {
+    "value": 0,
+    "name": "PWM4",
+    "pin": 14,
+    "pinName": "D5",
+    "type": "pwm",
+    "sceneDirection": 0
+  },
+  {
+    "value": 0,
+    "name": "PWM5",
+    "pin": 12,
+    "pinName": "D6",
+    "type": "pwm",
+    "sceneDirection": 0
+  },
+  {
+    "value": 0,
+    "name": "PWM6",
+    "pin": 13,
+    "pinName": "D7",
+    "type": "pwm",
+    "sceneDirection": 0
+  },
+  {
+    "value": 0,
+    "name": "LED1",
+    "pin": 5,
+    "pinName": "D1",
+    "type": "led",
+    "sceneDirection": 0
+  }
+]
