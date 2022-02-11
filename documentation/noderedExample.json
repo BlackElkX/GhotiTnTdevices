@@ -1,0 +1,1116 @@
+[
+  {
+      "id": "f9c192e0bef5b945",
+      "type": "tab",
+      "label": "Arduino",
+      "disabled": false,
+      "info": "",
+      "env": []
+  },
+  {
+      "id": "ebef9a1b188e60c0",
+      "type": "ui_switch",
+      "z": "f9c192e0bef5b945",
+      "name": "LED0",
+      "label": "LED0",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 9,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "decouple": "true",
+      "topic": "topic",
+      "topicType": "msg",
+      "style": "",
+      "onvalue": "{\"name\":\"LED0\",\"value\":\"ON\"}",
+      "onvalueType": "json",
+      "onicon": "",
+      "oncolor": "",
+      "offvalue": "{\"name\":\"LED0\",\"value\":\"OFF\"}",
+      "offvalueType": "json",
+      "officon": "",
+      "offcolor": "",
+      "animate": false,
+      "x": 790,
+      "y": 40,
+      "wires": [
+          [
+              "9ecba1d667726d1c"
+          ]
+      ]
+  },
+  {
+      "id": "defe79aa21f8860f",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM1",
+      "label": "PWM1",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "global",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 100,
+      "wires": [
+          [
+              "1b40700673724db7"
+          ]
+      ]
+  },
+  {
+      "id": "1b40700673724db7",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM1",
+      "func": "var name   = \"PWM1\";\nvar value  = msg.payload;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 100,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "33f1b78381f1bf08",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM2",
+      "label": "PWM2",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "flow",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 160,
+      "wires": [
+          [
+              "fefbdca0280a4898"
+          ]
+      ]
+  },
+  {
+      "id": "fefbdca0280a4898",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM2",
+      "func": "var name   = \"PWM2\";\nvar value  = msg.payload;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };\n",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 160,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "e7cc94a2879c8a82",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM3",
+      "label": "PWM3",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "msg",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 220,
+      "wires": [
+          [
+              "fd80ed7e2da26148"
+          ]
+      ]
+  },
+  {
+      "id": "fd80ed7e2da26148",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM3",
+      "func": "var name   = \"PWM3\";\nvar value  = msg.payload;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };\n",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 220,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "20c5514b5db81ede",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM4",
+      "label": "PWM4",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "msg",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 280,
+      "wires": [
+          [
+              "fd8392e544cd6bf1"
+          ]
+      ]
+  },
+  {
+      "id": "fd8392e544cd6bf1",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM4",
+      "func": "var name   = \"PWM4\";\nvar value  = msg.payload;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };\n",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 280,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "cf2924a9762fe912",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM5",
+      "label": "PWM5",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "msg",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 340,
+      "wires": [
+          [
+              "111122ea52501623"
+          ]
+      ]
+  },
+  {
+      "id": "111122ea52501623",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM5",
+      "func": "var name   = \"PWM5\";\nvar value  = msg.payload;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };\n",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 340,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "5b9238a0e11669fb",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM6",
+      "label": "PWM6",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "msg",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 400,
+      "wires": [
+          [
+              "f1d772f51b2eaed8"
+          ]
+      ]
+  },
+  {
+      "id": "f1d772f51b2eaed8",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "PWM6",
+      "func": "var name   = \"PWM6\";\nvar value  = msg.payload;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };\n",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 400,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "2ef552b86986162b",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "AzDeliveryRestResponse",
+      "func": "//Function tried to send a message of type number\n\n/*\n{\"outputs\":[{\"name\":\"PWM1\", \"value\":\"127\"},\n            {\"name\":\"PWM2\", \"value\":\"127\"},\n            {\"name\":\"PWM3\", \"value\":\"127\"},\n            {\"name\":\"PWM4\", \"value\":\"127\"},\n            {\"name\":\"PWM5\", \"value\":\"127\"},\n            {\"name\":\"PWM6\", \"value\":\"127\"}]}\n{\"outputs\":[{\"name\":\"LED0\", \"value\":\"ON\"},\n            {\"name\":\"PWM1\", \"value\":\"127\"},\n            {\"name\":\"PWM2\", \"value\":\"127\"},\n            {\"name\":\"PWM3\", \"value\":\"127\"},\n            {\"name\":\"PWM4\", \"value\":\"127\"},\n            {\"name\":\"PWM5\", \"value\":\"127\"},\n            {\"name\":\"PWM6\", \"value\":\"127\"}],\n \"sensors\":[],\n \"generals\":[{\"name\":\"LEDS\", \"value\":\"ON\"},\n             {\"name\":\"PWMS\", \"value\":\"127\"}],\n \"extra\":[{\"name\":\"scene\", \"value\":\"scNone\"},\n          {\"name\":\"debug\", \"value\":\"OFF\"},\n          {\"name\":\"debugPin\", \"value\":\"ON\"}]}\n\npayload: \"RequestError: connect EHOSTUNREACH 10.152.1.229:8080 : http://10.152.1.229:8080/status\"\ntopic: \"\"\n_msgid: \"d473e996c6a4a11a\"\nquery: \"status\"\nstatusCode: \"EHOSTUNREACH\"\n\n*/\nconst outputqty = 17;\nvar resultMsg = [outputqty];\nfor (index = 0; index < outputqty; index++) {\n  resultMsg[index] = null;\n}\n\nvar statusCode = msg.payload.statusCode;\nif (statusCode != null) {\n  resultMsg[outputqty - 2] = { payload: \"getSceneNames\" };\n  resultMsg[outputqty - 1] = { payload: msg.payload };\n} else {\n  var outputs  = msg.payload.outputs;\n  var sensors  = msg.payload.sensors;\n  var generals = msg.payload.generals;\n  var extras   = msg.payload.extra;\n  var index    = 0;\n\n  for (var output in outputs) {\n    var outindex = outputqty - 1;\n    switch (outputs[index].name) {\n      case \"LED0\":\n        outindex = 0;\n        value = {\"name\":\"LED0\", \"value\": outputs[index].value};\n        break;\n      case \"PWM1\":\n        outindex = 1;\n        value = parseInt(outputs[index].value);\n        break;\n      case \"PWM2\":\n        outindex = 2;\n        value = parseInt(outputs[index].value);\n        break;\n      case \"PWM3\":\n        outindex = 3;\n        value = parseInt(outputs[index].value);\n        break;\n      case \"PWM4\":\n        outindex = 4;\n        value = parseInt(outputs[index].value);\n        break;\n      case \"PWM5\":\n        outindex = 5;\n        value = parseInt(outputs[index].value);\n        break;\n      case \"PWM6\":\n        outindex = 6;\n        value = parseInt(outputs[index].value);\n        break;\n      default:\n        value = outputs[index];\n      break;\n    }\n    index++;\n    resultMsg[outindex] = { payload: value };\n  }\n\n  index = 0;\n  for (var sensor in sensors) {\n    outindex = outputqty - 1;\n    switch (sensors[index].name) {\n      case \"Humidity\":\n        outindex = 7;\n        value = parseInt(sensors[index].value);\n        break;\n      case \"btn1\":\n        outindex = 8;\n        value = {\"name\":\"btn1\", \"value\": sensors[index].value};\n        break;\n      case \"btn2\":\n        outindex = 9;\n        value = {\"name\":\"btn2\", \"value\": sensors[index].value};\n        break;\n      default:\n        value = sensors[index];\n        break;\n    }\n    index++;\n    resultMsg[outindex] = { payload: value };\n  }\n\n  //general\n  index = 0;\n  for (var general in generals) {\n    outindex = outputqty - 1;\n    switch (generals[index].name) {\n      case \"LEDS\":\n        outindex = 10;\n        value = {\"name\":\"LEDS\", \"value\": generals[index].value};\n        break;\n      case \"PWMS\":\n        outindex = 11;\n        value = parseInt(generals[index].value);\n        break;\n      default:\n        value = generals[index];\n        break;\n    }\n    index++;\n    resultMsg[outindex] = { payload: value };\n  }\n\n  index = 0;\n  for (var extra in extras) {\n    outindex = outputqty - 1;\n    switch(extras[index].name) {\n      case \"scene\":\n        outindex = 12;\n        value = extras[index].value;\n        break;\n      case \"debug\":\n        outindex = 13;\n        value = {\"name\":\"setDebug\", \"value\": extras[index].value};\n        break;\n      case \"debugPin\":\n        outindex = 14;\n        value = {\"name\":\"debugPin\", \"value\": extras[index].value};\n        break;\n      default:\n        value = extras[index];\n        break;\n    }\n    index++;\n    resultMsg[outindex] = { payload: value };\n  }\n}\nreturn resultMsg;\n",
+      "outputs": 17,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 550,
+      "y": 380,
+      "wires": [
+          [
+              "ebef9a1b188e60c0"
+          ],
+          [
+              "defe79aa21f8860f"
+          ],
+          [
+              "33f1b78381f1bf08"
+          ],
+          [
+              "e7cc94a2879c8a82"
+          ],
+          [
+              "20c5514b5db81ede"
+          ],
+          [
+              "cf2924a9762fe912"
+          ],
+          [
+              "5b9238a0e11669fb"
+          ],
+          [
+              "bc9fe2cfbfee3b50"
+          ],
+          [
+              "ba4562b508ca3114"
+          ],
+          [
+              "9d21d4b447a1fe52"
+          ],
+          [],
+          [
+              "e5d116379fce1a81",
+              "244a644d57e4d95f"
+          ],
+          [
+              "4db94cf2d4fe74f4"
+          ],
+          [
+              "16b9621021372da4"
+          ],
+          [],
+          [
+              "0d906f1ca380a816"
+          ],
+          [
+              "2328acb221b12086",
+              "ef4c6a00b838fddc"
+          ]
+      ]
+  },
+  {
+      "id": "9ecba1d667726d1c",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "LED0",
+      "func": "/*{\"name\":\"LED0\",\"value\":\"ON\"}*/\nvar name   = msg.payload.name;\nvar value  = msg.payload.value;\nreturn { payload: \"setOutput?\" + name + \"=\" + value };",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 40,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "06036c5612788a3f",
+      "type": "http request",
+      "z": "f9c192e0bef5b945",
+      "name": "GetStuffFromAdruinoWifiEsp8266",
+      "method": "GET",
+      "ret": "obj",
+      "paytoqs": "ignore",
+      "url": "http://10.152.1.229:8080/{{{query}}}",
+      "tls": "",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "senderr": false,
+      "x": 240,
+      "y": 380,
+      "wires": [
+          [
+              "2ef552b86986162b",
+              "a6ea92de01830a23"
+          ]
+      ]
+  },
+  {
+      "id": "77a468d82b983735",
+      "type": "change",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "rules": [
+          {
+              "t": "set",
+              "p": "query",
+              "pt": "msg",
+              "to": "payload",
+              "tot": "msg"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 300,
+      "y": 300,
+      "wires": [
+          [
+              "06036c5612788a3f"
+          ]
+      ]
+  },
+  {
+      "id": "849e3c666be12048",
+      "type": "http request",
+      "z": "f9c192e0bef5b945",
+      "name": "PutStuffOnAdruinoWifiEsp8266",
+      "method": "PUT",
+      "ret": "obj",
+      "paytoqs": "ignore",
+      "url": "http://10.152.1.229:8080/{{{query}}}",
+      "tls": "",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "senderr": false,
+      "x": 1430,
+      "y": 220,
+      "wires": [
+          [
+              "2ef552b86986162b"
+          ]
+      ]
+  },
+  {
+      "id": "1e1e4eb62185b3e7",
+      "type": "change",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "rules": [
+          {
+              "t": "set",
+              "p": "query",
+              "pt": "msg",
+              "to": "payload",
+              "tot": "msg"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 1160,
+      "y": 220,
+      "wires": [
+          [
+              "849e3c666be12048"
+          ]
+      ]
+  },
+  {
+      "id": "2328acb221b12086",
+      "type": "debug",
+      "z": "f9c192e0bef5b945",
+      "d": true,
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "true",
+      "targetType": "full",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 1350,
+      "y": 520,
+      "wires": []
+  },
+  {
+      "id": "172644f40e2d994c",
+      "type": "inject",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "props": [
+          {
+              "p": "payload"
+          },
+          {
+              "p": "topic",
+              "vt": "str"
+          }
+      ],
+      "repeat": "2",
+      "crontab": "",
+      "once": true,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "status",
+      "payloadType": "str",
+      "x": 130,
+      "y": 300,
+      "wires": [
+          [
+              "77a468d82b983735"
+          ]
+      ]
+  },
+  {
+      "id": "bc9fe2cfbfee3b50",
+      "type": "ui_gauge",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "group": "4f30456fc789d22f",
+      "order": 8,
+      "width": 0,
+      "height": 0,
+      "gtype": "gage",
+      "title": "sensor",
+      "label": "units",
+      "format": "{{value}}",
+      "min": 0,
+      "max": "1024",
+      "colors": [
+          "#00b500",
+          "#e6e600",
+          "#ca3838"
+      ],
+      "seg1": "",
+      "seg2": "",
+      "x": 790,
+      "y": 520,
+      "wires": []
+  },
+  {
+      "id": "ba4562b508ca3114",
+      "type": "ui_switch",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "label": "knopke 1",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": true,
+      "decouple": "false",
+      "topic": "topic",
+      "topicType": "msg",
+      "style": "",
+      "onvalue": "{\"name\":\"btn1\",\"value\":\"ON\"}",
+      "onvalueType": "str",
+      "onicon": "",
+      "oncolor": "",
+      "offvalue": "{\"name\":\"btn1\",\"value\":\"OFF\"}",
+      "offvalueType": "str",
+      "officon": "",
+      "offcolor": "",
+      "animate": false,
+      "x": 800,
+      "y": 580,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "9d21d4b447a1fe52",
+      "type": "ui_switch",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "label": "knopke 2",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 5,
+      "width": 0,
+      "height": 0,
+      "passthru": true,
+      "decouple": "false",
+      "topic": "topic",
+      "topicType": "msg",
+      "style": "",
+      "onvalue": "{\"name\":\"btn2\",\"value\":\"ON\"}",
+      "onvalueType": "str",
+      "onicon": "",
+      "oncolor": "",
+      "offvalue": "{\"name\":\"btn2\",\"value\":\"OFF\"}",
+      "offvalueType": "str",
+      "officon": "",
+      "offcolor": "",
+      "animate": false,
+      "x": 800,
+      "y": 640,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "16b9621021372da4",
+      "type": "ui_switch",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "label": "debug",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 6,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "decouple": "true",
+      "topic": "topic",
+      "topicType": "msg",
+      "style": "",
+      "onvalue": "{\"name\":\"setDebug\",\"value\":\"ON\"}",
+      "onvalueType": "json",
+      "onicon": "",
+      "oncolor": "",
+      "offvalue": "{\"name\":\"setDebug\",\"value\":\"OFF\"}",
+      "offvalueType": "json",
+      "officon": "",
+      "offcolor": "",
+      "animate": false,
+      "x": 790,
+      "y": 700,
+      "wires": [
+          [
+              "7fe288693fe7949a"
+          ]
+      ]
+  },
+  {
+      "id": "7fe288693fe7949a",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "Debug",
+      "func": "/*{name:\"setDebug\",value:\"ON\"}*/\nvar name   = msg.payload.name;\nvar value  = msg.payload.value;\nreturn { payload: \"setDebug?\" + name + \"=\" + value };",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 700,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "4db94cf2d4fe74f4",
+      "type": "ui_dropdown",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "label": "Kies een scene",
+      "tooltip": "",
+      "place": "Kies een scene",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "multiple": false,
+      "options": [],
+      "payload": "",
+      "topic": "topic",
+      "topicType": "msg",
+      "x": 820,
+      "y": 820,
+      "wires": [
+          [
+              "f77220707f34b2de"
+          ]
+      ]
+  },
+  {
+      "id": "8b96ce024a8bbb37",
+      "type": "http request",
+      "z": "f9c192e0bef5b945",
+      "name": "GetStuffFromAdruinoWifiEsp8266",
+      "method": "GET",
+      "ret": "obj",
+      "paytoqs": "ignore",
+      "url": "http://10.152.1.229:8080/{{{query}}}",
+      "tls": "",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "senderr": false,
+      "x": 1080,
+      "y": 760,
+      "wires": [
+          [
+              "885d4a99653ba734"
+          ]
+      ]
+  },
+  {
+      "id": "cbb83b747e5b658e",
+      "type": "http request",
+      "z": "f9c192e0bef5b945",
+      "name": "PutStuffOnAdruinoWifiEsp8266",
+      "method": "PUT",
+      "ret": "obj",
+      "paytoqs": "ignore",
+      "url": "http://10.152.1.229:8080/{{{query}}}",
+      "tls": "",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "senderr": false,
+      "x": 1430,
+      "y": 820,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "99dabc9f302689fb",
+      "type": "inject",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "props": [
+          {
+              "p": "payload"
+          },
+          {
+              "p": "topic",
+              "vt": "str"
+          }
+      ],
+      "repeat": "900",
+      "crontab": "",
+      "once": true,
+      "onceDelay": 0.1,
+      "topic": "",
+      "payload": "getSceneNames",
+      "payloadType": "str",
+      "x": 190,
+      "y": 760,
+      "wires": [
+          [
+              "0d906f1ca380a816"
+          ]
+      ]
+  },
+  {
+      "id": "0d906f1ca380a816",
+      "type": "change",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "rules": [
+          {
+              "t": "set",
+              "p": "query",
+              "pt": "msg",
+              "to": "payload",
+              "tot": "msg"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 820,
+      "y": 760,
+      "wires": [
+          [
+              "8b96ce024a8bbb37"
+          ]
+      ]
+  },
+  {
+      "id": "885d4a99653ba734",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "fillOptions",
+      "func": "const outputqty = 2;\nvar resultMsg = [outputqty];\nfor (index = 0; index < outputqty; index++) {\n  resultMsg[index] = null;\n}\n\nvar statusCode = msg.payload.statusCode;\nif (statusCode != null) {\n  resultMsg[outputqty - 1] = { payload: msg.payload };\n} else {\n  var names    = msg.payload.scenes;\n  var defScene = msg.payload.default;\n  resultMsg[0] = { options: names, payload: defScene };\n}\nreturn resultMsg;",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 1360,
+      "y": 760,
+      "wires": [
+          [
+              "4db94cf2d4fe74f4"
+          ]
+      ]
+  },
+  {
+      "id": "670d30d9f4009c70",
+      "type": "ui_button",
+      "z": "f9c192e0bef5b945",
+      "name": "allOff",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "label": "Alles uit",
+      "tooltip": "",
+      "color": "",
+      "bgcolor": "",
+      "icon": "",
+      "payload": "setAllOff",
+      "payloadType": "str",
+      "topic": "topic",
+      "topicType": "msg",
+      "x": 950,
+      "y": 640,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "24a2c3c1ce2e0cb2",
+      "type": "ui_button",
+      "z": "f9c192e0bef5b945",
+      "name": "allhalf",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "label": "Alles op half",
+      "tooltip": "",
+      "color": "",
+      "bgcolor": "",
+      "icon": "",
+      "payload": "setAllHalf",
+      "payloadType": "str",
+      "topic": "topic",
+      "topicType": "msg",
+      "x": 950,
+      "y": 580,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "b3841f93dfeeabcd",
+      "type": "ui_button",
+      "z": "f9c192e0bef5b945",
+      "name": "allfull",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "label": "Alles vollenbak",
+      "tooltip": "",
+      "color": "",
+      "bgcolor": "",
+      "icon": "",
+      "payload": "setAllFull",
+      "payloadType": "str",
+      "topic": "topic",
+      "topicType": "msg",
+      "x": 950,
+      "y": 520,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "e5d116379fce1a81",
+      "type": "ui_slider",
+      "z": "f9c192e0bef5b945",
+      "name": "All",
+      "label": "Alles",
+      "tooltip": "",
+      "group": "4f30456fc789d22f",
+      "order": 4,
+      "width": 0,
+      "height": 0,
+      "passthru": false,
+      "outs": "all",
+      "topic": "topic",
+      "topicType": "msg",
+      "min": 0,
+      "max": "255",
+      "step": 1,
+      "x": 790,
+      "y": 460,
+      "wires": [
+          [
+              "ca66ad61f3ed2193"
+          ]
+      ]
+  },
+  {
+      "id": "ca66ad61f3ed2193",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "Alles",
+      "func": "var name   = \"setAllValue\";\nvar value  = msg.payload;\nreturn { payload: \"setAllValue?\" + name + \"=\" + value };\n",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 950,
+      "y": 460,
+      "wires": [
+          [
+              "1e1e4eb62185b3e7"
+          ]
+      ]
+  },
+  {
+      "id": "63ed3dc6299ed46b",
+      "type": "catch",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "scope": null,
+      "uncaught": false,
+      "x": 80,
+      "y": 40,
+      "wires": [
+          [
+              "b48f55c988636fe7",
+              "c47915b7eebdf32c"
+          ]
+      ]
+  },
+  {
+      "id": "b48f55c988636fe7",
+      "type": "debug",
+      "z": "f9c192e0bef5b945",
+      "d": true,
+      "name": "errors arduino",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "true",
+      "targetType": "full",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 280,
+      "y": 80,
+      "wires": []
+  },
+  {
+      "id": "c47915b7eebdf32c",
+      "type": "file",
+      "z": "f9c192e0bef5b945",
+      "name": "arduinoLoggingErrors",
+      "filename": "/data/loggings/errors.json",
+      "appendNewline": true,
+      "createDir": true,
+      "overwriteFile": "false",
+      "encoding": "utf8",
+      "x": 300,
+      "y": 40,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "f77220707f34b2de",
+      "type": "function",
+      "z": "f9c192e0bef5b945",
+      "name": "SetScene",
+      "func": "var value  = msg.payload;\nreturn { payload: \"setScene?name=\" + value + \"&steps=5&pause=100\" };",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 1000,
+      "y": 820,
+      "wires": [
+          [
+              "9f3a0d02534a3744"
+          ]
+      ]
+  },
+  {
+      "id": "9f3a0d02534a3744",
+      "type": "change",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "rules": [
+          {
+              "t": "set",
+              "p": "query",
+              "pt": "msg",
+              "to": "payload",
+              "tot": "msg"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 1180,
+      "y": 820,
+      "wires": [
+          [
+              "cbb83b747e5b658e"
+          ]
+      ]
+  },
+  {
+      "id": "a6ea92de01830a23",
+      "type": "debug",
+      "z": "f9c192e0bef5b945",
+      "d": true,
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 510,
+      "y": 540,
+      "wires": []
+  },
+  {
+      "id": "ef4c6a00b838fddc",
+      "type": "file",
+      "z": "f9c192e0bef5b945",
+      "name": "arduinoLoggingErrors",
+      "filename": "/data/loggings/arduino/AzDeliveryRestResponseErrors.json",
+      "appendNewline": true,
+      "createDir": true,
+      "overwriteFile": "false",
+      "encoding": "utf8",
+      "x": 1400,
+      "y": 480,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "244a644d57e4d95f",
+      "type": "debug",
+      "z": "f9c192e0bef5b945",
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "statusVal": "",
+      "statusType": "auto",
+      "x": 1370,
+      "y": 420,
+      "wires": []
+  },
+  {
+      "id": "4f30456fc789d22f",
+      "type": "ui_group",
+      "name": "Arduino",
+      "tab": "7b470696fd1f2134",
+      "order": 4,
+      "disp": true,
+      "width": "6",
+      "collapse": true
+  },
+  {
+      "id": "7b470696fd1f2134",
+      "type": "ui_tab",
+      "name": "Technisch",
+      "icon": "dashboard",
+      "disabled": false,
+      "hidden": false
+  }
+]
