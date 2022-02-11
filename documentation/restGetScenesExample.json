@@ -1,0 +1,11 @@
+{
+  "scenes": [
+    "scAllUpDown",
+    "scAllUpDownFollowing",
+    "scAllUpDownAlternating",
+    "scOddUpDown",
+    "scEvenUpDown",
+    "scAllRandom",
+    "scNone"
+  ]
+}

@@ -1,0 +1,165 @@
+1) An example url:
+
+  http://192.168.254.254:80/status
+
+2) Overview
+
+2.1) All GET REST calls:
+
+ - /status
+ - /getSceneNames
+
+2.2) All PUT REST calls:
+
+ - /setOutput
+ - /setDebug
+ - /setAllOff
+ - /setAllHalf
+ - /setAllFull
+ - /setAllValue
+ - /setScene
+ - setSceneSteps
+ - setScenePause
+
+3) In detail:
+
+3.1) All GET REST calls:
+
+3.1.1) /status
+  To get the status of all in- and outputs, as well as general stuff, use the /status call.
+  returns:
+  {
+    "outputs": [
+      { "name": "PWM1", "value": "0" },
+      { "name": "PWM2", "value": "10" },
+      { "name": "PWM3", "value": "152" },
+      { "name": "PWM4", "value": "55" },
+      { "name": "PWM5", "value": "62" },
+      { "name": "PWM6", "value": "255" }
+    ],
+    "sensors": [
+      { "name": "BTN0", "value": "ON" },
+      { "name": "Analog1", "value": "253" }
+    ],
+    "generals": [
+      { "name": "LEDS", "value": "ON" },
+      { "name": "PWMS", "value": "0" }
+    ],
+    "extra": [
+      { "name": "scene", "value": "scNone" },
+      { "name": "steps", "value": 4 },
+      { "name": "pause", "value": 150 },
+      { "name": "debug", "value": "OFF" },
+      { "name": "debugPin", "value": "OFF" }
+    ]
+  }
+
+3.1.2) /getSceneNames
+  To get all the available scenes, use this call.
+  returns:
+  {
+    "scenes": [
+      "scAllUpDown",
+      "scAllUpDownFollowing",
+      "scAllUpDownAlternating",
+      "scOddUpDown",
+      "scEvenUpDown",
+      "scAllRandom",
+      "scNone"
+    ]
+  }
+
+3.2) All PUT REST calls:
+
+3.2.1) /setOutput?PWM2=55
+  returns:
+  {
+    "outputs": [
+      { "name": "PWM2", "value": "0" }
+    ]
+  }
+
+3.2.2) /setDebug?setDebug=ON
+
+3.2.3) /setAllOff
+  returns:
+  {
+    "outputs": [
+      { "name": "PWM1", "value": "0" },
+      { "name": "PWM2", "value": "0" },
+      { "name": "PWM3", "value": "0" },
+      { "name": "PWM4", "value": "0" },
+      { "name": "PWM5", "value": "0" },
+      { "name": "PWM6", "value": "0" }
+    ]
+  }
+
+3.2.4) /setAllHalf
+  returns:
+  {
+    "outputs": [
+      { "name": "PWM1", "value": "127" },
+      { "name": "PWM2", "value": "127" },
+      { "name": "PWM3", "value": "127" },
+      { "name": "PWM4", "value": "127" },
+      { "name": "PWM5", "value": "127" },
+      { "name": "PWM6", "value": "127" }
+    ]
+  }
+
+3.2.5) /setAllFull
+  returns:
+  {
+    "outputs": [
+      { "name": "PWM1", "value": "255" },
+      { "name": "PWM2", "value": "255" },
+      { "name": "PWM3", "value": "255" },
+      { "name": "PWM4", "value": "255" },
+      { "name": "PWM5", "value": "255" },
+      { "name": "PWM6", "value": "255" }
+    ]
+  }
+
+3.2.6) /setAllValue?setAllValue=121
+  returns:
+  {
+    "outputs": [
+      { "name": "PWM1", "value": "121" },
+      { "name": "PWM2", "value": "121" },
+      { "name": "PWM3", "value": "121" },
+      { "name": "PWM4", "value": "121" },
+      { "name": "PWM5", "value": "121" },
+      { "name": "PWM6", "value": "121" }
+    ]
+  }
+
+3.2.7) /setScene?name=csAllRandom&steps=5&pause=200
+  returns:
+  {
+    "extra": [
+      { "name": "scene", "value": "csAllRandom" },
+      { "name": "steps", "value": 5 },
+      { "name": "pause", "value": 200 }
+    ]
+  }
+
+3.2.8) /setSceneSteps?name=csAllUpDown&steps=5&pause=200
+  returns:
+  {
+    "extra": [
+      { "name": "scene", "value": "scAllUpDown" },
+      { "name": "steps", "value": 1 },
+      { "name": "pause", "value": 100 }
+    ]
+  }
+
+3.2.9) /setScenePause?name=csNone&steps=0&pause=0
+  returns:
+  {
+    "extra": [
+      { "name": "scene", "value": "scNone" },
+      { "name": "steps", "value": 0 },
+      { "name": "pause", "value": 00 }
+    ]
+  }
+

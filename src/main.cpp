@@ -194,6 +194,12 @@ void getStatus() {
   response += ", \"extra\":[{\"name\":\"scene\", \"value\":\"";
   response += getSceneTypeName(activeScene);
   response += "\"}";
+  response += ", {\"name\":\"steps\", \"value\":\"";
+  response += String(stepsScene);
+  response += "\"}";
+  response += ", {\"name\":\"pause\", \"value\":\"";
+  response += String(pauseScene);
+  response += "\"}";
   #ifdef serialdebug
     response += ", {\"name\":\"debug\", \"value\":\"";
     if (getDebug()) {
@@ -438,7 +444,14 @@ void setNewScene() {
 
     response += "{\"name\":\"scene\", \"value\":\"";
     response += getSceneTypeName(activeScene);
-    response += "\"}]}";
+    response += "\"}";
+    response += ", {\"name\":\"steps\", \"value\":\"";
+    response += String(stepsScene);
+    response += "\"}";
+    response += ", {\"name\":\"pause\", \"value\":\"";
+    response += String(pauseScene);
+    response += "\"}";
+    response += "]}";
     debugLineToSerial(" => " + response);
     restSrv.send(200, "text/json", response);
   #endif
@@ -470,7 +483,14 @@ void setStepsScene() {
 
     response += "{\"name\":\"scene\", \"value\":\"";
     response += getSceneTypeName(activeScene);
-    response += "\"}]}";
+    response += "\"}";
+    response += ", {\"name\":\"steps\", \"value\":\"";
+    response += String(stepsScene);
+    response += "\"}";
+    response += ", {\"name\":\"pause\", \"value\":\"";
+    response += String(pauseScene);
+    response += "\"}";
+    response += "]}";
     debugLineToSerial(" => " + response);
     restSrv.send(200, "text/json", response);
   #endif
@@ -504,7 +524,14 @@ void setPauseScene() {
 
     response += "{\"name\":\"scene\", \"value\":\"";
     response += getSceneTypeName(activeScene);
-    response += "\"}]}";
+    response += "\"}";
+    response += ", {\"name\":\"steps\", \"value\":\"";
+    response += String(stepsScene);
+    response += "\"}";
+    response += ", {\"name\":\"pause\", \"value\":\"";
+    response += String(pauseScene);
+    response += "\"}";
+    response += "]}";
     debugLineToSerial(" => " + response);
     restSrv.send(200, "text/json", response);
   #endif
@@ -546,6 +573,8 @@ void restServerRouting() {
     restSrv.on(F("/setAllFull"),    HTTP_PUT, setAllFull);
     restSrv.on(F("/setAllValue"),   HTTP_PUT, setAllValue);
     restSrv.on(F("/setScene"),      HTTP_PUT, setNewScene);
+    restSrv.on(F("/setSceneSteps"), HTTP_PUT, setStepsScene);
+    restSrv.on(F("/setScenePause"), HTTP_PUT, setPauseScene);
   #endif
 }
 

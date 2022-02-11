@@ -1,0 +1,20 @@
+{
+  "outputs": [
+    { "name": "PWM1", "value": "0" },
+    { "name": "PWM2", "value": "0" },
+    { "name": "PWM3", "value": "0" }
+  ],
+  "sensors": [
+    { "name": "BTN0", "value": "ON" },
+    { "name": "Analog1", "value": "253" }
+  ],
+  "generals": [
+    { "name": "LEDS", "value": "ON" },
+    { "name": "PWMS", "value": "0" }
+  ],
+  "extra": [
+    { "name": "scene", "value": "scNone" },
+    { "name": "debug", "value": "OFF" },
+    { "name": "debugPin", "value": "OFF" }
+  ]
+}
