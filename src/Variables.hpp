@@ -22,8 +22,8 @@
 #define develop
 /*
 // wifi stuff
-#define ssid     "Lakota"
-#define password "qwrffy365645DRGFdfr"
+#define ssid     ""
+#define password ""
 */
 #define webserver
 #ifdef webserver
