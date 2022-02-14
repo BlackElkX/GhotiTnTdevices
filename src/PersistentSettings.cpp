@@ -2,7 +2,7 @@
 #include <WString.h>
 #include <Global.hpp>
 #include <ArduinoJson.h>
-#include "types.hpp"
+#include "Types.hpp"
 #include "PersistentSettings.hpp"
 
 #pragma once
@@ -50,9 +50,7 @@ void saveConfig() {
   serializeJson(configJson, file);
   file.close();
   debugLineToSerial("config saved to file");
-  #ifdef serialdebug
-    getConfig();
-  #endif
+  getConfig();
 }
 
 String getDeviceName() {
@@ -65,10 +63,6 @@ SceneStruct getScene() {
   scenestruct.steps_ms = configJson["scene"]["steps_ms"];
   scenestruct.pause_ms = configJson["scene"]["pause_ms"];
   return scenestruct;
-}
-
-void setActiveScene(String aActiveScene) {
-  configJson["scene"]["active"] = aActiveScene;
 }
 
 DebugStruct getDebugSettings() {
@@ -120,16 +114,46 @@ int getSensorQty() {
 SensorStruct getSensor(int index) {
   JsonArray sensorArray = configJson["sensors"].as<JsonArray>();
   SensorStruct sensor;
-    sensor.value      = sensorArray[index]["value"];
-    sensor.name       = String(sensorArray[index]["name"]);
-    sensor.pin        = sensorArray[index]["pin"];         
-    sensor.pinName    = String(sensorArray[index]["pinName"]);
-    sensor.type       = sensorArray[index]["type"];           
-    sensor.hysteresis = sensorArray[index]["sceneDirection"]; 
-    sensor.minValue   = sensorArray[index]["minvalue"];
-    sensor.maxValue   = sensorArray[index]["maxvalue"];
-    sensor.minRemap   = sensorArray[index]["minremap"];
-    sensor.maxRemap   = sensorArray[index]["maxremap"];
-    sensor.multiplier = sensorArray[index]["multiplier"];
+  sensor.value      = sensorArray[index]["value"];
+  sensor.name       = String(sensorArray[index]["name"]);
+  sensor.pin        = sensorArray[index]["pin"];         
+  sensor.pinName    = String(sensorArray[index]["pinName"]);
+  sensor.type       = sensorArray[index]["type"];           
+  sensor.hysteresis = sensorArray[index]["sceneDirection"]; 
+  sensor.minValue   = sensorArray[index]["minvalue"];
+  sensor.maxValue   = sensorArray[index]["maxvalue"];
+  sensor.minRemap   = sensorArray[index]["minremap"];
+  sensor.maxRemap   = sensorArray[index]["maxremap"];
+  sensor.multiplier = sensorArray[index]["multiplier"];
   return sensor;
+}
+
+
+bool getDebug() {
+  return configJson["debug"]["enabled"];
+}
+
+void setDebug(bool debug) {
+  configJson["debug"]["enabled"] = debug;
+}
+
+void setActiveScene(String aActiveScene) {
+  configJson["scene"]["active"] = aActiveScene;
+}
+
+void setOutputValue(int index, int value) {
+  configJson["outputs"][index]["value"] = value;
+}
+/*
+void setOutputValueSceneDir(int index, int value, int sceneDirection) {
+  configJson["outputs"][index]["value"] = value;
+  configJson["outputs"][index]["sceneDirection"] = sceneDirection;
+}
+*/
+void setOutputSceneDir(int index, int sceneDirection) {
+  configJson["outputs"][index]["sceneDirection"] = sceneDirection;
+}
+
+void setSensorValue(int index, int value) {
+  configJson["sensors"][index]["value"] = value;
 }

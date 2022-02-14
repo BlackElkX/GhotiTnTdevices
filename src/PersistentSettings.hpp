@@ -2,7 +2,6 @@
 #define PersistentSettings_hpp
 
 #include <WString.h>
-//#include <ArduinoJson.h>
 #include "Types.hpp"
 #include "Structures.hpp"
 
@@ -25,5 +24,10 @@ OutputStruct getOutput(int index);
 int          getSensorQty();
 SensorStruct getSensor(int index);
 
+bool getDebug();
+void setDebug(bool debug);
 void setActiveScene(String aActiveScene);
+void setOutputValue(int index, int value);
+void setOutputSceneDir(int index, int sceneDirection);
+void setSensorValue(int index, int value);
 #endif

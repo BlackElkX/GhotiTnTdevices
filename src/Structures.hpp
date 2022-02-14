@@ -3,7 +3,7 @@
 
 #include <ESP8266WiFi.h>
 #include <WString.h>
-#include "types.hpp"
+#include "Types.hpp"
 
 #pragma once
 

@@ -21,7 +21,7 @@
  - setSceneSteps
  - setScenePause
 
-3) In detail:
+3) In detail, with return json:
 
 3.1) All GET REST calls:
 

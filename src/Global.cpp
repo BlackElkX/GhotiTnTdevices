@@ -1,50 +1,29 @@
 #include <Arduino.h>
 #include <WString.h>
-#include "variables.hpp"
+#include "PersistentSettings.hpp"
 
 #pragma once
 
 bool getDebugPinState() {
-  return !(digitalRead(debugPin) > 0);
+  return !(digitalRead(getDebugSettings().pin) > 0);
 }
 
 void debugToSerial(const String message) {
-  #ifdef serialdebug
-    if (debug || getDebugPinState()) {
-      Serial.print(message);
-    }
-  #endif
+  if (getDebug() || getDebugPinState()) {
+    Serial.print(message);
+  }
 }
 
 void debugLineToSerial(const String message) {
-  #ifdef serialdebug
-    if (debug || getDebugPinState()) {
-      Serial.println(message);
-    }
-  #endif
+  if (getDebug() || getDebugPinState()) {
+    Serial.println(message);
+  }
 }
 
 void debugToSerial(const int message) {
-  #ifdef serialdebug
   debugToSerial(String(message));
-  #endif
 }
 
 void debugLineToSerial(const int message) {
-  #ifdef serialdebug
-    debugLineToSerial(String(message));
-  #endif
-}
-
-bool getDebug() {
-  #ifdef serialdebug
-  return debug;
-  #endif
-  return false;
-}
-
-void setDebug(bool value) {
-  #ifdef serialdebug
-  debug  = value;
-  #endif
+  debugLineToSerial(String(message));
 }
