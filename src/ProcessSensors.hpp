@@ -1,9 +1,12 @@
 #ifndef ProcessSensors_hpp
 #define ProcessSensors_hpp
 
-#pragma once
+#include "Structures.hpp"
 
-int processSensor(int aHysteresis, int aValue, int aSensor);
-int processDigitalInput(int aValue, int aSensor);
+//#pragma once
+
+int processSensor(SensorStruct sensor);
+int processDigitalInput(SensorStruct sensor);
+int processAnalogButtonArray(SensorStruct sensor);
 
 #endif

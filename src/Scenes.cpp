@@ -4,169 +4,92 @@
 #include "Types.hpp"
 #include "PersistentSettings.hpp"
 
-#pragma once
+extern SceneStruct sceneInfo;
+extern int outputQuantity;
+extern OutputStruct outputInfo[USED_OUTPUT_QTY];
 
-//static scenes activeScene = scNone;
+//#pragma once
 
-void startScene(int steps, sceneTypes scene) {
+void startScene() {
   stopScene();
-  nextStepInScene(steps, scene);
+  nextStepInScene();
 }
 
-/*void startScene(int steps, sceneTypes scene, int aValues[], int oSceneDirection[]) {
-  stopScene(aValues, oSceneDirection);
-  nextStepInScene(steps, scene, aValues, oSceneDirection);
-}*/
-
-void nextStepInScene(int steps, sceneTypes scene) {
-  for (int index = 0; index < getOutputQty(); index++) {
-    switch (scene) {
-      case scAllUpDownFollowing:
-        allUpDownFollowing(steps);
-        break;
-      case scAllUpDownAlternating:
-        allUpDownAlternating(steps);
-        break;
-      case scOddUpDown:
-        oddUpDown(steps);
-        break;
-      case scEvenUpDown:
-        evenUpDown(steps);
-        break;
-      case scAllRandom:
-        allRandom(steps);
-        break;
-      case scAllUpDown:
-        allUpDown(steps);
-        break;
-      default:
-        break;
-    }
-  }
-}
-
-/*void nextStepInScene(int steps, sceneTypes scene, int aValues[], int oSceneDirection[]) {
-  switch (scene) {
+void nextStepInScene() {
+  switch (sceneInfo.active) {
     case scAllUpDownFollowing:
-      allUpDownFollowing(steps, aValues, oSceneDirection);
+      allUpDownFollowing();
       break;
     case scAllUpDownAlternating:
-      allUpDownAlternating(steps, aValues, oSceneDirection);
+      allUpDownAlternating();
       break;
     case scOddUpDown:
-      oddUpDown(steps, aValues, oSceneDirection);
+      oddUpDown();
       break;
     case scEvenUpDown:
-      evenUpDown(steps, aValues, oSceneDirection);
+      evenUpDown();
       break;
     case scAllRandom:
-      allRandom(steps, aValues);
+      allRandom();
       break;
     case scAllUpDown:
-      allUpDown(steps, aValues, oSceneDirection);
+      allUpDown();
       break;
     default:
       break;
   }
-}*/
+}
 
 void stopScene() {
-  for (int index = 0; index < getOutputQty(); index++) {
+  for (int index = 0; index < outputQuantity; index++) {
     setOutputValue(index, 0);
     setOutputSceneDir(index, 0);
   }
 }
 
-/*void stopScene(int oValues[], int oSceneDirection[]) {
-  for (int index = 0; index < outputs; index++) {
-    oValues[index] = 0;
-    oSceneDirection[index] = 0;
-  }
-}*/
-
-void allUpDown(int steps) {
-  for (int index = 0; index < getOutputQty(); index++) {
+void allUpDown() {
+  for (int index = 0; index < outputQuantity; index++) {
     checkFirstRun(index);
-    setOutputValue(index, getOutput(index).value + (getOutput(index).sceneDirection * steps));
+    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
     switchSceneDirection(index);
   }
 }
 
-/*void allUpDown(int steps, int oValues[], int oSceneDirection[]) {
-  for (int index = 0; index < outputs; index++) {
-    checkFirstRun(index, oValues, oSceneDirection);
-    oValues[index] = oValues[index] + (oSceneDirection[index] * steps);
-    switchSceneDirection(index, oValues, oSceneDirection);
-  }
-}*/
-
-void allUpDownFollowing(int steps) {
-  for (int index = 0; index < getOutputQty(); index++) {
-    checkFirstRunFollowing(index, steps);
-    setOutputValue(index, getOutput(index).value + (getOutput(index).sceneDirection * steps));
+void allUpDownFollowing() {
+  for (int index = 0; index < outputQuantity; index++) {
+    checkFirstRunFollowing(index);
+    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
     switchSceneDirection(index);
   }
 }
 
-/*void allUpDownFollowing(int steps, int oValues[], int oSceneDirection[]) {
-  for (int index = 0; index < outputs; index++) {
-    checkFirstRunFollowing(index, steps, oValues, oSceneDirection);
-    oValues[index] = oValues[index] + (oSceneDirection[index] * steps);
-    switchSceneDirection(index, oValues, oSceneDirection);
-  }
-}*/
-
-void allUpDownAlternating(int steps) {
-  for (int index = 0; index < getOutputQty(); index++) {
-    checkFirstRunFollowing(index, steps);
-    setOutputValue(index, getOutput(index).value + (getOutput(index).sceneDirection * steps));
+void allUpDownAlternating() {
+  for (int index = 0; index < outputQuantity; index++) {
+    checkFirstRunAlternating(index);
+    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
     switchSceneDirection(index);
   }
 }
 
-/*void allUpDownAlternating(int steps, int oValues[], int oSceneDirection[]) {
-  for (int index = 0; index < outputs; index++) {
-    checkFirstRunAlternating(index, oValues, oSceneDirection);
-    oValues[index] = oValues[index] + (oSceneDirection[index] * steps);
-    switchSceneDirection(index, oValues, oSceneDirection);
-  }
-}*/
-
-void oddUpDown(int steps) {
-  for (int index = 1; index < getOutputQty(); index + 2) {
+void oddUpDown() {
+  for (int index = 1; index < outputQuantity; index + 2) {
     checkFirstRun(index);
-    setOutputValue(index, getOutput(index).value + (getOutput(index).sceneDirection * steps));
+    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
     switchSceneDirection(index);
   }
 }
 
-/*void oddUpDown(int steps, int oValues[], int oSceneDirection[]) {
-  for (int index = 1; index < outputs; index = index + 2) {
-    checkFirstRun(index, oValues, oSceneDirection);
-    oValues[index] = oValues[index] + (oSceneDirection[index] * steps);
-    switchSceneDirection(index, oValues, oSceneDirection);
-  }
-}*/
-
-void evenUpDown(int steps) {
-  for (int index = 0; index < getOutputQty(); index + 2) {
+void evenUpDown() {
+  for (int index = 0; index < outputQuantity; index + 2) {
     checkFirstRun(index);
-    setOutputValue(index, getOutput(index).value + (getOutput(index).sceneDirection * steps));
+    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
     switchSceneDirection(index);
   }
 }
 
-/*void evenUpDown(int steps, int oValues[], int oSceneDirection[]) {
-  for (int index = 0; index < outputs; index = index + 2) {
-    checkFirstRun(index, oValues, oSceneDirection);
-    oValues[index] = oValues[index] + (oSceneDirection[index] * steps);
-    switchSceneDirection(index, oValues, oSceneDirection);
-  }
-}*/
-
-void allRandom(int steps) {
-  for (int index = 0; index < getOutputQty(); index++) {
-    int value = random(256 / steps) * steps;
+void allRandom() {
+  for (int index = 0; index < outputQuantity; index++) {
+    int value = random(256 / sceneInfo.steps_ms) * sceneInfo.steps_ms;
     if (value > 255) {
       value = 255;
     }
@@ -174,33 +97,16 @@ void allRandom(int steps) {
   }
 }
 
-/*void allRandom(int steps, int oValues[]) {
-  for (int index = 0; index < outputs; index++) {
-    int value = random(256 / steps) * steps;
-    if (value > 255) {
-      value = 255;
-    }
-    oValues[index] = value;
-  }
-}*/
-
 void checkFirstRun(int index) {
-  if (getOutput(index).sceneDirection == 0) {
+  if (outputInfo[index].sceneDirection == 0) {
     setOutputSceneDir(index, 1);
     setOutputValue(index, 0);
   }
 }
 
-/*void checkFirstRun(int index, int oValues[], int oSceneDirection[]) {
-  if (oSceneDirection[index] == 0) {
-    oSceneDirection[index] = 1;
-    oValues[index] = 0;
-  }
-}*/
-
-void checkFirstRunFollowing(int index, int steps) {
+void checkFirstRunFollowing(int index) {
   if (index > 0) {
-    if (getOutput(index - 1).value > ((256 / steps) / (getOutputQty() + 1))) {
+    if (getOutput(index - 1).value > ((256 / sceneInfo.steps_ms) / (outputQuantity + 1))) {
       checkFirstRun(index);
     }
   } else {
@@ -208,49 +114,19 @@ void checkFirstRunFollowing(int index, int steps) {
   }
 }
 
-/*void checkFirstRunFollowing(int index, int steps, int oValues[], int oSceneDirection[]) {
-  if (index > 0) {
-    if (oValues[index - 1] > ((256 / steps) / (outputs + 1))) {
-      checkFirstRun(index, oValues, oSceneDirection);
-    }
-  } else {
-    checkFirstRun(index, oValues, oSceneDirection);
-  }
-}*/
-
 void checkFirstRunAlternating(int index) {
-  if (getOutput(index).sceneDirection == 0) {
+  if (outputInfo[index].sceneDirection == 0) {
     if ((index % 2) != 0) {
       setOutputSceneDir(index, 1);
-      setOutputValue(index, 0);
     } else {
       setOutputSceneDir(index, -1);
-      setOutputValue(index, 0);
     }
+    setOutputValue(index, 0);
   }
 }
 
-/*void checkFirstRunAlternating(int index, int oValues[], int oSceneDirection[]) {
-  if (oSceneDirection[index] == 0) {
-    if ((index % 2) != 0) {
-      oSceneDirection[index] = 1;
-      oValues[index] = 0;
-    } else {
-      oSceneDirection[index] = -1;
-      oValues[index] = 255;
-    }
+void switchSceneDirection(int index) {
+  if ((outputInfo[index].value >= 255) || (outputInfo[index].value <= 0)) {
+    outputInfo[index].sceneDirection = -outputInfo[index].sceneDirection;
   }
-}*/
-
-int switchSceneDirection(int index) {
-  if ((getOutput(index).value >= 255) || (getOutput(index).value <= 0)) {
-    return -getOutput(index).sceneDirection;
-  }
-  return getOutput(index).sceneDirection;
 }
-
-/*void switchSceneDirection(int index, int oValues[], int oSceneDirection[]) {
-  if ((oValues[index] >= 255) || (oValues[index] <= 0)) {
-    oSceneDirection[index] = -oSceneDirection[index];
-  }
-}*/

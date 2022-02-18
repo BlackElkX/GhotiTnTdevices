@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "Global.hpp"
 
-#pragma once
+//#pragma once
 
 int processLED(String request, String obj, int iValue, int iLed) {
   int aValue = iValue;
@@ -16,7 +16,6 @@ int processLED(String request, String obj, int iValue, int iLed) {
 }
 
 int processHtmlPWM(String request, String obj, int aValue, int iPwm) {
-  debugToSerial(" received");
   int iValue = aValue;
   if (request.indexOf("/" + obj + "=255") != -1) {
     iValue = 255;
@@ -30,16 +29,12 @@ int processHtmlPWM(String request, String obj, int aValue, int iPwm) {
     iValue = pwmDummy.toInt();
   }
   analogWrite(iPwm, iValue);
-  debugToSerial(" - gives the value of: ");
   debugLineToSerial(iValue);
   return iValue;
 }
 
 int processRestPWM(String obj, int aValue, int iPwm) {
-  debugToSerial(obj + " received");
   analogWrite(iPwm, aValue);
-  debugToSerial(" - gives the value of: ");
-  debugLineToSerial(aValue);
   return aValue;
 }
 
@@ -50,13 +45,9 @@ void processRestPWMScene(String obj, int aValue, int iPwm) {
 int processRefresh(String request, int arefreshrate) {
   int result = arefreshrate;
   if (request.indexOf("/refresh=on") != -1) {
-    debugLineToSerial("refresh set on");
     result = 5;
   } else if (request.indexOf("/refresh=off") != -1) {
-    debugLineToSerial("refresh set off");
     result = 0;
   }
-  debugToSerial("Refreshing at rate ");
-  debugLineToSerial(result);
   return result;
 }

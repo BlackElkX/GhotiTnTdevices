@@ -1,26 +1,42 @@
 #include <Arduino.h>
 #include "Global.hpp"
+#include "Structures.hpp"
 
-#pragma once
+//#pragma once
 
-int processSensor(int aHysteresis, int aValue, int aSensor) {
-  int iValue = aValue;
-  int nValue = analogRead(aSensor);
+int processSensor(SensorStruct sensor) {
+  int iValue = sensor.value;
+  int nValue = analogRead(sensor.pin);
 //  debugLineToSerial("Sensor " + String(aSensor) + " gives " + String(nValue));
-  int maxValue = iValue + (aHysteresis / 2);
-  int minValue = iValue - (aHysteresis / 2);
+  //Serial.print("read = " + String(nValue) + "    ");
+  int maxValue = iValue + (sensor.hysteresis / 2);
+  int minValue = iValue - (sensor.hysteresis / 2);
   if ((nValue < minValue) || (nValue > maxValue)) {
     iValue = nValue;
   }
   return iValue;
 }
 
-int processDigitalInput(int aValue, int aSensor) {
-  int iValue = aValue;
-  int nValue = digitalRead(aSensor);
+int processDigitalInput(SensorStruct sensor) {
+  int iValue = sensor.value;
+  int nValue = digitalRead(sensor.pin);
 //  debugLineToSerial("Button " + String(aSensor) + " gives " + String(nValue));
+  //Serial.print("read = " + String(nValue) + "    ");
   if (nValue != iValue) {
     iValue = nValue;
   }
   return iValue;
+}
+
+int processAnalogButtonArray(SensorStruct sensor) {
+  //int iValue = aValue;
+  int nValue = analogRead(sensor.pin);
+  //Serial.print("read = " + String(nValue) + "    ");
+  //debugLineToSerial("Sensor " + String(aSensor) + " gives " + String(nValue));
+  //int maxValue = iValue + (aHysteresis / 2);
+  //int minValue = iValue - (aHysteresis / 2);
+  //if ((nValue < minValue) || (nValue > maxValue)) {
+  //  iValue = nValue;
+  //}
+  return nValue;
 }

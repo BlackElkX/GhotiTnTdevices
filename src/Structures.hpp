@@ -5,7 +5,7 @@
 #include <WString.h>
 #include "Types.hpp"
 
-#pragma once
+//#pragma once
 
 typedef struct {
   int    pin;
@@ -20,7 +20,7 @@ typedef struct {
 } HtmlStruct;
 
 typedef struct {
-  String active;
+  sceneTypes active;
   int steps_ms;
   int pause_ms;
 } SceneStruct;
@@ -52,6 +52,8 @@ typedef struct {
   int minRemap;
   int maxRemap;
   int multiplier;
+  int buttonQty;
+  buttonTypes buttontypes[4];
 } SensorStruct;
 
 typedef struct {

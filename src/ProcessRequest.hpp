@@ -3,7 +3,7 @@
 
 #include <WString.h>
 
-#pragma once
+//#pragma once
 
 int processLED(String request, String obj, int iValue, int iLed);
 int processHtmlPWM(String request, String obj, int iValue, int iPwm);

@@ -3,7 +3,7 @@
 
 #include <ESP8266WiFi.h>
 
-#pragma once
+//#pragma once
 
 void htmlPageStart(WiFiClient client);
 void htmlPageHeadRefresh(WiFiClient client, int aRefreshRate);

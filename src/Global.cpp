@@ -2,10 +2,10 @@
 #include <WString.h>
 #include "PersistentSettings.hpp"
 
-#pragma once
+extern DebugStruct debugInfo;
 
 bool getDebugPinState() {
-  return !(digitalRead(getDebugSettings().pin) > 0);
+  return !(digitalRead(debugInfo.pin) > 0);
 }
 
 void debugToSerial(const String message) {

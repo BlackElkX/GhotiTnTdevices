@@ -2,19 +2,15 @@
 #define PersistentSettings_hpp
 
 #include <WString.h>
+#include <ArduinoJson.h>
 #include "Types.hpp"
 #include "Structures.hpp"
 
-#pragma once
+//#pragma once
 
-//1732 (2048) alles bijeen
-// 411  (512) enkel config
-// 868 (1024) enkel output
-// 421  (512) enkel sensor
-//1700 (2048) alle bestanden appart
-
-void         getConfig();
-void         saveConfig();
+bool         readConfig(/*JsonObject& configJson*/);
+bool         saveConfig(JsonObject& configJson);
+void         printConfig();
 String       getDeviceName();
 SceneStruct  getScene();
 DebugStruct  getDebugSettings();
@@ -25,6 +21,7 @@ int          getSensorQty();
 SensorStruct getSensor(int index);
 
 bool getDebug();
+
 void setDebug(bool debug);
 void setActiveScene(String aActiveScene);
 void setOutputValue(int index, int value);

@@ -18,8 +18,8 @@
  - /setAllFull
  - /setAllValue
  - /setScene
- - setSceneSteps
- - setScenePause
+ - /setSceneSteps
+ - /setScenePause
 
 3) In detail, with return json:
 

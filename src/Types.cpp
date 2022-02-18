@@ -1,18 +1,17 @@
 #include <WString.h>
 #include "Types.hpp"
 
-#pragma once
-
 #define IDNAME(name) #name
 
 char* outputTypeNames[] = {IDNAME(oLED),     IDNAME(oPWM),    IDNAME(oNone)};
 
-char* sensorTypeNames[] = {IDNAME(sDigital), IDNAME(sAnalog), IDNAME(sNone)};
+char* sensorTypeNames[] = {IDNAME(sDigital), IDNAME(sAnalog), IDNAME(sAnalogButtons), IDNAME(sNone)};
 
 char* sceneTypeNames[]  = {IDNAME(scAllUpDown), IDNAME(scAllUpDownFollowing), IDNAME(scAllUpDownAlternating),
                            IDNAME(scOddUpDown), IDNAME(scEvenUpDown),         IDNAME(scAllRandom),
                            IDNAME(scNone)};
 
+char* buttonTypeNames[] = {IDNAME(bPower), IDNAME(bUp), IDNAME(bDown), IDNAME(bProgram), IDNAME(bNone)};
 
 String getOutputTypeName(outputTypes outputType) {
   return String(outputTypeNames[outputType]);
@@ -51,4 +50,17 @@ sceneTypes getSceneTypeFromName(String name) {
     }
   }
   return scNone;
+}
+
+String getButtonTypeName(buttonTypes button) {
+  return String(buttonTypeNames[button]);
+}
+
+buttonTypes getButtonTypeFromName(String name) {
+  for (buttonTypes button = bPower; button <= bNone; button = buttonTypes(button + 1)) {
+    if (getButtonTypeName(button) == name) {
+      return button;
+    }
+  }
+  return bNone;
 }

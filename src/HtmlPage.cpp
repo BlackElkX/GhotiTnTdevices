@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
-#pragma once
+//#pragma once
 
 void htmlPageStart(WiFiClient client) {
   client.println("HTTP/1.1 200 OK"); //

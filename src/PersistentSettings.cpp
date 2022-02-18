@@ -5,52 +5,98 @@
 #include "Types.hpp"
 #include "PersistentSettings.hpp"
 
-#pragma once
 JsonObject configJson;
 
-void getConfig() {
-  //StaticJsonDocument<2048> jsonDoc;
-  DynamicJsonDocument jsonDoc(2048);
+//global used variables
+extern DebugStruct debugInfo;
+extern HtmlStruct  htmlInfo;
+extern SceneStruct sceneInfo;
+extern WifiStruct  wifiInfo;
+
+extern int outputQuantity;
+extern OutputStruct outputInfo[USED_OUTPUT_QTY];
+extern int sensorQuantity;
+extern SensorStruct sensorInfo[USED_SENSOR_QTY];
+
+bool readConfig() {
+  debugLineToSerial("start json doc");
+  DynamicJsonDocument jsonDoc(MAX_FILE_SIZE);
   if (!LittleFS.begin()) {
     debugLineToSerial("An error occured while mounting file system");
-    return;
+    configJson["error"] = "An error occured while mounting file system";
+    return false;
   }
+  debugLineToSerial("start file");
   File file = LittleFS.open("/config.json", "r");
   if (!file) {
     debugLineToSerial("Failed to open config.json for reading");
-    return;
+    configJson["error"] = "Failed to open config.json for reading";
+    return false;
   }
-  String configString = "";
-  while (file.available()) {
-    configString += file.read();
+  debugLineToSerial("start reading");
+  
+  size_t size = file.size();
+  debugToSerial("Size = ");
+  debugLineToSerial(size);
+  if (size > MAX_FILE_SIZE) {
+    debugLineToSerial("Config file size is too large");
+    configJson["error"] = "Config file size is too Large";
+    return false;
   }
+
+  std::unique_ptr<char[]> buf(new char[size]);
+  file.readBytes(buf.get(), size);
+ 
+  debugLineToSerial("file is read:");
+  DeserializationError error = deserializeJson(jsonDoc, buf.get());
+  configJson = jsonDoc.as<JsonObject>();
+  //configJson["error"] = "";
+  //configJson.printTo(Serial);
+  debugLineToSerial(String(configJson));
+    
   file.close();
-  debugLineToSerial(configString);
-
-  DeserializationError error = deserializeJson(jsonDoc, configString);
-
+  
   if (error) {
-    debugLineToSerial(F("deserializeJson() failed: "));
+    debugToSerial("deserializeJson() failed: ");
     debugLineToSerial(error.f_str());
-    return;
+    configJson["error"] = "deserializeJson() failed: " + String(error.f_str());
+    return false;
   }
-  configJson  = jsonDoc.as<JsonObject>();
+  debugInfo = getDebugSettings();
+  wifiInfo  = getWifiSettings();
+  sceneInfo = getScene();
+  outputQuantity = getOutputQty();
+  for (int index = 0; index < outputQuantity; index++) {
+    outputInfo[index] = getOutput(index);
+  }
+ 
+  sensorQuantity = getSensorQty();
+  for (int index = 0; index < sensorQuantity; index++) {
+    sensorInfo[index] = getSensor(index);
+  }
+
+  return true;
 }
 
-void saveConfig() {
+bool saveConfig(JsonObject& configJson) {
   if (!LittleFS.begin()) {
     debugLineToSerial("An error occured while mounting file system");
-    return;
+    return false;
   }
-  File file = LittleFS.open("/config.json", "r");
+  File file = LittleFS.open("/config.json", "w");
   if (!file) {
-    debugLineToSerial("Failed to open config.json for reading");
-    return;
+    debugLineToSerial("Failed to open config.json for writing");
+    return false;
   }
   serializeJson(configJson, file);
   file.close();
   debugLineToSerial("config saved to file");
-  getConfig();
+  return readConfig(/*configJson*/);
+}
+
+void printConfig() {
+  Serial.println("configJson");
+  //debugLineToSerial(String(*configJson));
 }
 
 String getDeviceName() {
@@ -59,7 +105,7 @@ String getDeviceName() {
 
 SceneStruct getScene() {
   SceneStruct scenestruct;
-  scenestruct.active   = String(configJson["scene"]["active"]);
+  scenestruct.active   = getSceneTypeFromName(configJson["scene"]["active"]);
   scenestruct.steps_ms = configJson["scene"]["steps_ms"];
   scenestruct.pause_ms = configJson["scene"]["pause_ms"];
   return scenestruct;
@@ -101,7 +147,7 @@ OutputStruct getOutput(int index) {
   output.name           = String(outputArray[index]["name"]);
   output.pin            = outputArray[index]["pin"];
   output.pinName        = String(outputArray[index]["pinName"]);
-  output.type           = outputArray[index]["type"];
+  output.type           = getOutputTypeFromName(outputArray[index]["type"]);
   output.sceneDirection = outputArray[index]["sceneDirection"];
   return output;
 }
@@ -116,44 +162,42 @@ SensorStruct getSensor(int index) {
   SensorStruct sensor;
   sensor.value      = sensorArray[index]["value"];
   sensor.name       = String(sensorArray[index]["name"]);
-  sensor.pin        = sensorArray[index]["pin"];         
+  sensor.pin        = sensorArray[index]["pin"];
   sensor.pinName    = String(sensorArray[index]["pinName"]);
-  sensor.type       = sensorArray[index]["type"];           
-  sensor.hysteresis = sensorArray[index]["sceneDirection"]; 
+  sensor.type       = getSensorTypeFromName(sensorArray[index]["type"]);
+  sensor.hysteresis = sensorArray[index]["sceneDirection"];
   sensor.minValue   = sensorArray[index]["minvalue"];
   sensor.maxValue   = sensorArray[index]["maxvalue"];
   sensor.minRemap   = sensorArray[index]["minremap"];
   sensor.maxRemap   = sensorArray[index]["maxremap"];
   sensor.multiplier = sensorArray[index]["multiplier"];
+  sensor.buttonQty  = sensorArray[index]["buttonQty"];
+  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
+    sensor.buttontypes[btnIndex] = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
+  }
   return sensor;
 }
 
-
 bool getDebug() {
-  return configJson["debug"]["enabled"];
+  return debugInfo.enabled;
 }
 
 void setDebug(bool debug) {
-  configJson["debug"]["enabled"] = debug;
+  debugInfo.enabled = debug;
 }
 
 void setActiveScene(String aActiveScene) {
-  configJson["scene"]["active"] = aActiveScene;
+  sceneInfo.active = getSceneTypeFromName(aActiveScene);
 }
 
 void setOutputValue(int index, int value) {
-  configJson["outputs"][index]["value"] = value;
+  outputInfo[index].value = value;
 }
-/*
-void setOutputValueSceneDir(int index, int value, int sceneDirection) {
-  configJson["outputs"][index]["value"] = value;
-  configJson["outputs"][index]["sceneDirection"] = sceneDirection;
-}
-*/
+
 void setOutputSceneDir(int index, int sceneDirection) {
-  configJson["outputs"][index]["sceneDirection"] = sceneDirection;
+  outputInfo[index].sceneDirection = sceneDirection;
 }
 
 void setSensorValue(int index, int value) {
-  configJson["sensors"][index]["value"] = value;
+  sensorInfo[index].value = value;
 }
