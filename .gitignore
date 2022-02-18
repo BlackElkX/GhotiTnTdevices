@@ -32,9 +32,10 @@
 *.app
 
 # Custom files
-#data/config.json
+data
 tests
 .DS_Store
 .pio
 .vscode
 pio
+data/config.json

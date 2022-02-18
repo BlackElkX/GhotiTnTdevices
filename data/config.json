@@ -12,8 +12,8 @@
     "baudrate": 115200
   },
   "wifi": {
-    "ssid": "",
-    "passphrase": "",
+    "ssid": "AnSSID",
+    "passphrase": "aWiFiPassPhraseForWPAorSomethingElse",
     "mode": "client",
     "restport": 8080,
     "httpport": 80,

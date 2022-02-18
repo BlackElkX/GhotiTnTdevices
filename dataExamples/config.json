@@ -8,7 +8,7 @@
   "debug": {
     "pin": 16,
     "pinName": "D0",
-    "enabled": true,
+    "enabled": false,
     "baudrate": 115200
   },
   "wifi": {
@@ -31,7 +31,7 @@
       "name": "PWM1",
       "pin": 4,
       "pinName": "D2",
-      "type": "pwm",
+      "type": "oPWM",
       "sceneDirection": 0
     },
     {
@@ -39,7 +39,7 @@
       "name": "PWM2",
       "pin": 0,
       "pinName": "D3",
-      "type": "pwm",
+      "type": "oPWM",
       "sceneDirection": 0
     },
     {
@@ -47,7 +47,7 @@
       "name": "PWM3",
       "pin": 2,
       "pinName": "D4",
-      "type": "pwm",
+      "type": "oPWM",
       "sceneDirection": 0
     },
     {
@@ -55,7 +55,7 @@
       "name": "PWM4",
       "pin": 14,
       "pinName": "D5",
-      "type": "pwm",
+      "type": "oPWM",
       "sceneDirection": 0
     },
     {
@@ -63,7 +63,7 @@
       "name": "PWM5",
       "pin": 12,
       "pinName": "D6",
-      "type": "pwm",
+      "type": "oPWM",
       "sceneDirection": 0
     },
     {
@@ -71,7 +71,7 @@
       "name": "PWM6",
       "pin": 13,
       "pinName": "D7",
-      "type": "pwm",
+      "type": "oPWM",
       "sceneDirection": 0
     },
     {
@@ -79,7 +79,7 @@
       "name": "LED1",
       "pin": 5,
       "pinName": "D1",
-      "type": "led",
+      "type": "oLED",
       "sceneDirection": 0
     }
   ],
@@ -89,26 +89,15 @@
       "name": "sensor1",
       "pin": 17,
       "pinName": "A0",
-      "type": "analog",
+      "type": "sAnalogButtons",
       "hysteresis": 10,
       "minvalue": 0,
       "maxvalue": 1024,
       "minremap": 0,
       "maxremap": 255,
-      "multiplier": 1
-    },
-    {
-      "value": 0,
-      "name": "button1",
-      "pin": 15,
-      "pinName": "D8",
-      "type": "digital",
-      "hysteresis": 0,
-      "minvalue": 0,
-      "maxvalue": 0,
-      "minremap": 0,
-      "maxremap": 0,
-      "multiplier": 1
+      "multiplier": 1,
+      "buttonQty": 4,
+      "buttonfunctions":["bPower", "bUp", "bDown", "bProgram"]
     }
   ]
 }
