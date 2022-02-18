@@ -33,10 +33,7 @@
 
 # Custom files
 data/config.json
-data/.DS_Store
-src/tests/Archief/.DS_Store
-src/tests/Archief.zip
-src/tests/.DS_Store
+tests
 .DS_Store
 .pio
 .vscode
