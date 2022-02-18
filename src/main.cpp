@@ -25,7 +25,7 @@ extern SensorStruct sensorInfo[USED_SENSOR_QTY];
 static bool loopFirstT = false;
 static JsonObject mConfigJson;
 
-WiFiServer  httpSrv(80);      //webserver
+WiFiServer       httpSrv(80); //webserver
 ESP8266WebServer restSrv(81); //restserver
 
 void initiateValues() {

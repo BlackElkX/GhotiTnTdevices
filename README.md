@@ -11,11 +11,9 @@ A rest api is available.
 - I use as development and debug a NodeMCU ESP8266 module.
 - As production boards, is used.
 
-Even Tasmota mentioned that this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
+Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
 
 Todo:
-- adding documentation about the rest api.
-- 4 buttons using the A0 analog pin to use it stand-alone
 - a switch to disable wifi functionality (only when power is off, you can use it. If powered, the switch will not be checked)
 - a power switch (only on hardware level)
 - an ap wifi mode with fixed ip address
@@ -26,7 +24,13 @@ Todo:
 - checking memory usage
 - ...
 
-To build this, I use platformio on Mac, Linux and Win.
+Started:
+- 4 buttons using the A0 analog pin to use it stand-alone
+
+Done:
+- adding documentation about the rest api.
+
+To build this, I use platformio in visual studio code on Mac, Linux and Windows.
 
 Upload is as follow:
  1 in platformio.ini, select the correct board.
