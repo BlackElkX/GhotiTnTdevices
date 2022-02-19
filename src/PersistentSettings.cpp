@@ -165,7 +165,7 @@ SensorStruct getSensor(int index) {
   sensor.pin        = sensorArray[index]["pin"];
   sensor.pinName    = String(sensorArray[index]["pinName"]);
   sensor.type       = getSensorTypeFromName(sensorArray[index]["type"]);
-  sensor.hysteresis = sensorArray[index]["sceneDirection"];
+  sensor.hysteresis = sensorArray[index]["hysteresis"];
   sensor.minValue   = sensorArray[index]["minvalue"];
   sensor.maxValue   = sensorArray[index]["maxvalue"];
   sensor.minRemap   = sensorArray[index]["minremap"];
