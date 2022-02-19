@@ -1,5 +1,4 @@
 #include "Types.hpp"
-#include "ProcessSensors.hpp"
 #include "ProcessRequest.hpp"
 #include "HtmlPage.hpp"
 #include "Global.hpp"
@@ -717,20 +716,30 @@ void loopHTTPpage(WiFiClient client) {
 
 void loopBOARDsensors() {
   for (int index = 0; index < sensorQuantity; index++) {
+    int iValue = sensorInfo[index].value;
+    int nValue;
+    int maxValue = iValue + (sensorInfo[index].hysteresis / 2);
+    int minValue = iValue - (sensorInfo[index].hysteresis / 2);
     switch (sensorInfo[index].type) {
       case sDigital:
-        setSensorValue(index, processDigitalInput(sensorInfo[index]));
+        setSensorValue(index, digitalRead(sensorInfo[index].pin));
         break;
       case sAnalog:
-        setSensorValue(index, processSensor(sensorInfo[index]));
+        nValue = analogRead(sensorInfo[index].pin);
+        //debugLineToSerial("Sensor " + String(aSensor) + " gives " + String(nValue));
+        //Serial.print("read = " + String(nValue) + "    ");
+        if ((nValue < minValue) || (nValue > maxValue)) {
+          iValue = nValue;
+        }
+        setSensorValue(index, iValue);
         break;
       case sAnalogButtons:
         setSensorValue(index, analogRead(sensorInfo[index].pin));
-        delay(sensorInfo[index].readDelay);
         break;
       default:
         break;
     }
+    delay(sensorInfo[index].readDelay);
   }
 }
 
