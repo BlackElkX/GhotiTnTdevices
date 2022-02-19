@@ -172,14 +172,18 @@ SensorStruct getSensor(int index) {
   sensor.maxRemap   = sensorArray[index]["maxremap"];
   sensor.multiplier = sensorArray[index]["multiplier"];
   sensor.buttonQty  = sensorArray[index]["buttonQty"];
+  sensor.readDelay        = sensorArray[index]["readDelay"];
+  sensor.btnArrayIncrease = sensorArray[index]["btnArrayIncrease"];
+  sensor.btnArrayDecrease = sensorArray[index]["btnArrayDecrease"];
+  sensor.readTimeout      = sensorArray[index]["readTimeout"];
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
-    sensor.buttontypes[btnIndex]  = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
-    sensor.buttonValues[btnIndex] = sensorArray[index]["buttonValues"][btnIndex];
-    //Serial.println("button value for " + String(index) + " = " + String(sensor.buttonValues[btnIndex]));
+    sensor.btnArray[btnIndex].types     = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
+    sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonResitorValues"][btnIndex];
+    sensor.btnArray[btnIndex].timePress = millis();
+    sensor.btnArray[btnIndex].pressed   = false;
+    //sensor.buttontypes[btnIndex]  = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
+    //sensor.buttonResitorValues[btnIndex] = sensorArray[index]["buttonResitorValues"][btnIndex];
   }
-  sensor.buttonIncrease = sensorArray[index]["buttonIncrease"];
-  sensor.buttonDecrease = sensorArray[index]["buttonDecrease"];
-  sensor.readDelay      = sensorArray[index]["readDelay"];
   return sensor;
 }
 

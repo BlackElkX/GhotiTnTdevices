@@ -41,6 +41,13 @@ typedef struct {
 } WifiStruct;
 
 typedef struct {
+  buttonTypes types;
+  int resitor;
+  unsigned long timePress;
+  bool pressed;
+} btnArrayStruct;
+
+typedef struct {
   int pin;
   int value;
   String name;
@@ -53,11 +60,11 @@ typedef struct {
   int maxRemap;
   int multiplier;
   int buttonQty;
-  buttonTypes buttontypes[4];
-  int buttonValues[4];
-  int buttonIncrease;
-  int buttonDecrease;
   int readDelay;
+  unsigned long readTimeout;
+  int btnArrayIncrease;
+  int btnArrayDecrease;
+  btnArrayStruct btnArray[4];
 } SensorStruct;
 
 typedef struct {

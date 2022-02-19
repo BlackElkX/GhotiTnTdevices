@@ -445,54 +445,59 @@ void setPauseScene() {
 }
 
 void processAnalogButton(SensorStruct sensor) {
-  switch (sensor.type) {
-    case bPower:
-      if (checkAllOutputsOn()) {
-        setAllOffBtn();
-      } else {
-        setAllHalfBtn();
+  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
+    unsigned long timestamp = millis() + sensor.readTimeout;
+    Serial.println(String(sensor.btnArray[btnIndex].timePress) + " < " + String(timestamp));
+    if ((sensor.btnArray[btnIndex].pressed) && (sensor.btnArray[btnIndex].timePress < timestamp)) {
+      Serial.println(" button is pressed");
+      sensor.btnArray[btnIndex].timePress = timestamp;
+      switch (sensor.btnArray[btnIndex].types) {
+        case bPower:
+          if (checkAllOutputsOn()) {
+            setAllOffBtn();
+          } else {
+            setAllHalfBtn();
+          }
+          break;
+        case bProgram:
+          stopSceneNow();
+          sceneInfo.active = sceneTypes(sceneInfo.active + 1);
+          if (sceneInfo.active == scNone) {
+            sceneInfo.active = scAllUpDown;
+          }
+          startScene();
+          break;
+        case bUp:
+          setAllValueBtn(sensor.btnArrayIncrease);
+          break;
+        case bDown:
+          setAllValueBtn(-sensor.btnArrayDecrease);
+          break;
+        default:
+          break;
       }
-      break;
-    case bProgram:
-      stopSceneNow();
-      sceneInfo.active = sceneTypes(sceneInfo.active + 1);
-      if (sceneInfo.active == scNone) {
-        sceneInfo.active = scAllUpDown;
-      }
-      startScene();
-      break;
-    case bUp:
-      setAllValueBtn(sensor.buttonIncrease);
-      break;
-    case bDown:
-      setAllValueBtn(-sensor.buttonDecrease);
-      break;
-    default:
-      break;
+    }
   }
 }
 
 String processAnalogButtonArrayJson(SensorStruct sensor) {
   String result = "";
-  //int divider = (sensor.maxValue - sensor.minValue) / sensor.buttonQty;
-  //debugToSerial("divider = " + String(divider));
   for (int index = 0; index < sensor.buttonQty; index++) {
     if (index > 0) {
       result += ", ";
     }
     result += "{\"name\": \"" + sensor.name + "-" + String(index + 1);
-    int low  = sensor.buttonValues[index] - sensor.hysteresis;
-    int high = sensor.buttonValues[index] + sensor.hysteresis;
-    Serial.print("     index = "  + String(index) + " low = "    + String(low) + " high = "   + String(high) + " value = "  + String(sensor.value));
+    int low  = sensor.btnArray[index].resitor - sensor.hysteresis;
+    int high = sensor.btnArray[index].resitor + sensor.hysteresis;
     if ((sensor.value > low) && (sensor.value < high)) {
       result += "\", \"value\":\"ON\"";
+      sensor.btnArray[index].pressed = true;
       processAnalogButton(sensor);
-      Serial.println("    OM");
     } else {
+      sensor.btnArray[index].pressed = false;
       result += "\", \"value\":\"OFF\"";
-      Serial.println("    OFF");
     }
-    result += ", \"type\": \"" + getButtonTypeName(sensor.buttontypes[index]) + "\"}";
+    result += ", \"type\": \"" + getButtonTypeName(sensor.btnArray[index].types) + "\"}";
   }
   debugLineToSerial(" " + result);
   return result;
