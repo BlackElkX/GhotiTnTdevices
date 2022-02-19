@@ -11,6 +11,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
+//#include "main.hpp"
 
 extern DebugStruct debugInfo;
 extern HtmlStruct  htmlInfo;
@@ -21,9 +22,6 @@ extern int outputQuantity;
 extern OutputStruct outputInfo[USED_OUTPUT_QTY];
 extern int sensorQuantity;
 extern SensorStruct sensorInfo[USED_SENSOR_QTY];
-
-static bool loopFirstT = false;
-static JsonObject mConfigJson;
 
 WiFiServer       httpSrv(80); //webserver
 ESP8266WebServer restSrv(81); //restserver
@@ -84,30 +82,6 @@ void handleNotFound() {
   restSrv.send(404, "text/plain", message);
 }
 
-String processAnalogButtonArrayJson(SensorStruct sensor) {
-  String result = "";
-  int divider = (sensor.maxValue - sensor.minValue) / sensor.buttonQty;
-  debugToSerial("divider = " + String(divider));
-  for (int index = 0; index < sensor.buttonQty; index++) {
-    if (index > 0) {
-      result += ", ";
-    }
-    int low  = divider * (index);
-    int high = divider * (index + 1);
-    debugToSerial("     index = "  + String(index));
-    debugToSerial(" low = "    + String(low));
-    debugToSerial(" high = "   + String(high));
-    debugToSerial(" value = "  + String(sensor.value));
-    if ((sensor.value > low) && (sensor.value < high)) {
-      result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":\"ON\", \"type\": \"" + getButtonTypeName(sensor.buttontypes[index]) + "\"}";
-    } else {
-      result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":\"OFF\"}";
-    }
-  }
-  debugLineToSerial(" "/* + result*/);
-  return result;
-}
-
 void setDebuging() {
   Serial.print/*debugToSerial*/("set debugging to: ");
   Serial.print/*debugToSerial*/(restSrv.argName(0));
@@ -143,7 +117,7 @@ String processOutput(String obj, String value) {
           result = "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + lValue + "\"}";
           break;
         case oPWM:
-          setOutputValue(index, processRestPWM(outputInfo[index].name, value.toInt(), outputInfo[index].pin));
+          setOutputValue(index, processPWM(value.toInt(), outputInfo[index].pin));
           result = "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + String(outputInfo[index].value) + "\"}";
           break;
         default:
@@ -153,127 +127,6 @@ String processOutput(String obj, String value) {
     }
   }
   return result;
-}
-
-void getStatus() {
-  debugToSerial("getting status from rest api: ");
-  String response = "{";
-
-  //outputs
-  response += "\"outputs\":[";
-  int  lLEDValue    = -1;
-  bool LEDDifferent = false;
-  int  lPWMValue    = -1;
-  bool PWMDifferent = false;
-  for (int index = 0; index < outputQuantity; index++) {
-    if (index > 0) {
-      response += ", ";
-    }
-    String lValue = "ON";
-    switch (outputInfo[index].type) {
-      case oLED:
-        if (outputInfo[index].value == 0) {
-          lValue = "OFF";
-        }
-        if (lLEDValue != outputInfo[index].value) {
-          if (lLEDValue > -1) {
-            LEDDifferent = true;
-          }
-          lLEDValue = outputInfo[index].value;
-        }
-        response += "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + lValue + "\", \"type\":\"" + getOutputTypeName(outputInfo[index].type) + "\"}";
-        break;
-      case oPWM:
-        response += "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + String(outputInfo[index].value) + "\", \"type\":\"" + getOutputTypeName(outputInfo[index].type) + "\"}";
-        if (lPWMValue != outputInfo[index].value) {
-          if (lPWMValue > -1) {
-            PWMDifferent = true;
-          }
-          lPWMValue = outputInfo[index].value;
-        }
-        break;
-      default:
-        response += "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"n/a\",\"type\":\"type unknown\"}";
-        break;
-    }
-  }
-  response += "]";
-
-  //sensors
-  response += ", \"sensors\":[";
-  for (int index = 0; index < sensorQuantity; index++) {
-    if (index > 0) {
-      response += ", ";
-    }
-    String lValue = "ON";
-    switch (sensorInfo[index].type) {
-      case sDigital:
-        if (sensorInfo[index].value == 0) {
-          lValue = "OFF";
-        }
-        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + lValue + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\"}";
-        break;
-      case sAnalog:
-        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + String(sensorInfo[index].value) + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\"}";
-        break;
-      case sAnalogButtons:
-        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + String(sensorInfo[index].value) + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\", \"buttons\":[";
-        response += processAnalogButtonArrayJson(sensorInfo[index]);
-        response += "]}";
-        break;
-      default:
-        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"type unknown\"}";
-        break;
-    }    
-  }
-  response += "]";
-
-  //gezamelijk
-  response += ", \"generals\":[";
-
-  if (!LEDDifferent) {
-    String lValue = "ON";
-    if (lLEDValue == 0) {
-      lValue = "OFF";
-    }
-    response += "{\"name\":\"LEDS\", \"value\":\"" + lValue + "\"}";
-  }
-  if (!LEDDifferent && !PWMDifferent) {
-    response += ", ";
-  }
-  if (!PWMDifferent) {
-    response += "{\"name\":\"PWMS\", \"value\":\"" + String(lPWMValue) + "\"}";
-  }
-  response += "]";
-
-  //extras, like scene, debug status, ...
-  response += ", \"extra\":[{\"name\":\"scene\", \"value\":\"";
-  response += getSceneTypeName(sceneInfo.active);
-  response += "\"}";
-  response += ", {\"name\":\"steps\", \"value\":\"";
-  response += String(sceneInfo.active);
-  response += "\"}";
-  response += ", {\"name\":\"pause\", \"value\":\"";
-  response += String(sceneInfo.active);
-  response += "\"}";
-  response += ", {\"name\":\"debug\", \"value\":\"";
-  if (getDebug()) {
-    response += "ON";
-  } else {
-    response += "OFF";
-  }
-  response += "\"}, {\"name\":\"debugPin\", \"value\":\"";
-  if (getDebugPinState()) {
-    response += "ON";
-  } else {
-    response += "OFF";
-  }
-  response += "\"}";
-  response += "]}";
-
-  debugLineToSerial(response);
-
-  restSrv.send(200, "text/json", response);
 }
 
 void getSceneNames() {
@@ -322,6 +175,23 @@ void setOutput() {
   restSrv.send(200, "text/json", response);
 }
 
+void setAllOffBtn() {
+  stopSceneNow();
+  for (int index = 0; index < outputQuantity; index++) {
+    switch (outputInfo[index].type) {
+      case oLED:
+        digitalWrite(outputInfo[index].pin, LOW);
+        setOutputValue(index, LOW);
+        break;
+      case oPWM:
+        setOutputValue(index, processPWM(0, outputInfo[index].pin));
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 void setAllOff() {
   Serial.print/*debugToSerial*/("set all off: ");
   stopSceneNow();
@@ -344,6 +214,14 @@ void setAllOff() {
   response += "]}";
   Serial.println/*debugLineToSerial*/(" => " + response);
   restSrv.send(200, "text/json", response);
+}
+
+void setAllHalfBtn() {
+  for (int index = 0; index < outputQuantity; index++) {
+    if (outputInfo[index].type == oPWM) {
+      setOutputValue(index, processPWM(127, outputInfo[index].pin));
+    }
+  }
 }
 
 void setAllHalf() {
@@ -394,17 +272,42 @@ void setAllFull() {
   restSrv.send(200, "text/json", response);
 }
 
+void setAllValueBtn(int amount) {
+  for (int index = 0; index < outputQuantity; index++) {
+    if (outputInfo[index].type == oPWM) {
+      int newValue = outputInfo[index].value + amount;
+      if (newValue < 0) {
+        newValue = 0;
+      }
+      if (newValue > 255) {
+        newValue = 255;
+      }
+      setOutputValue(index, processPWM(newValue, outputInfo[index].pin));
+    }
+  }
+}
+
+bool checkAllOutputsOn() {
+  bool result = false;
+  for (int index = 0; index < outputQuantity; index++) {
+    if (outputInfo[index].value > 0) {
+      result = true;
+    }
+  }
+  return result;
+}
+
 void setAllValue() {
-  Serial.print/*debugToSerial*/("set all:");
+  debugToSerial("set all:");
   stopSceneNow();
   String response = "{\"outputs\":[";
 
   int argCount = restSrv.args();
-  Serial.println/*debugLineToSerial*/(argCount);
+  debugLineToSerial(argCount);
   String aValue = restSrv.arg(0);
   int count = 0;
   for (int index = 0; index < outputQuantity; index++) {
-    Serial.println/*debugLineToSerial*/(outputInfo[index].name + " => " + outputInfo[index].value);
+    debugLineToSerial(outputInfo[index].name + " => " + outputInfo[index].value);
     String lValue = aValue;
     if (outputInfo[index].type == oLED) {
       if (aValue == "0") {
@@ -416,13 +319,13 @@ void setAllValue() {
     String result = processOutput(outputInfo[index].name, lValue);
     if (count > 0) {
       response += ", ";
-      Serial.print/*debugToSerial*/(" - ");
+      debugToSerial(" - ");
     }
     count++;
     response += result;
   }
   response += "]}";
-  Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 }
 
@@ -430,7 +333,6 @@ void setNewScene() {
   debugToSerial("set scene to: ");
   String response = "{\"extra\":[";
   int argCount = restSrv.args();
-  //Serial.println/*debugLineToSerial*/(argCount);
   String sceneName;
   for (int index = 0; index < argCount; index++) {
     if (restSrv.argName(index) == "name") {
@@ -543,6 +445,177 @@ void setPauseScene() {
   restSrv.send(200, "text/json", response);
 }
 
+void processAnalogButton(SensorStruct sensor) {
+  switch (sensor.type) {
+    case bPower:
+      if (checkAllOutputsOn()) {
+        setAllOffBtn();
+      } else {
+        setAllHalfBtn();
+      }
+      break;
+    case bProgram:
+      stopSceneNow();
+      sceneInfo.active = sceneTypes(sceneInfo.active + 1);
+      if (sceneInfo.active == scNone) {
+        sceneInfo.active = scAllUpDown;
+      }
+      startScene();
+      break;
+    case bUp:
+      setAllValueBtn(sensor.buttonIncrease);
+      break;
+    case bDown:
+      setAllValueBtn(-sensor.buttonDecrease);
+      break;
+    default:
+      break;
+  }
+}
+
+String processAnalogButtonArrayJson(SensorStruct sensor) {
+  String result = "";
+  int divider = (sensor.maxValue - sensor.minValue) / sensor.buttonQty;
+  debugToSerial("divider = " + String(divider));
+  for (int index = 0; index < sensor.buttonQty; index++) {
+    if (index > 0) {
+      result += ", ";
+    }
+    int low  = divider * (index);
+    int high = divider * (index + 1);
+    debugToSerial("     index = "  + String(index) + " low = "    + String(low) + " high = "   + String(high) + " value = "  + String(sensor.value));
+    if ((sensor.value > low) && (sensor.value < high)) {
+      result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":\"ON\", \"type\": \"" + getButtonTypeName(sensor.buttontypes[index]) + "\"}";
+      processAnalogButton(sensor);
+    } else {
+      result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":\"OFF\"}";
+    }
+  }
+  debugLineToSerial(" "/* + result*/);
+  return result;
+}
+
+void getStatus() {
+  debugToSerial("getting status from rest api: ");
+  String response = "{";
+
+  //outputs
+  response += "\"outputs\":[";
+  int  lLEDValue    = -1;
+  bool LEDDifferent = false;
+  int  lPWMValue    = -1;
+  bool PWMDifferent = false;
+  for (int index = 0; index < outputQuantity; index++) {
+    if (index > 0) {
+      response += ", ";
+    }
+    String lValue = "ON";
+    switch (outputInfo[index].type) {
+      case oLED:
+        if (outputInfo[index].value == 0) {
+          lValue = "OFF";
+        }
+        if (lLEDValue != outputInfo[index].value) {
+          if (lLEDValue > -1) {
+            LEDDifferent = true;
+          }
+          lLEDValue = outputInfo[index].value;
+        }
+        response += "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + lValue + "\", \"type\":\"" + getOutputTypeName(outputInfo[index].type) + "\"}";
+        break;
+      case oPWM:
+        response += "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + String(outputInfo[index].value) + "\", \"type\":\"" + getOutputTypeName(outputInfo[index].type) + "\"}";
+        if (lPWMValue != outputInfo[index].value) {
+          if (lPWMValue > -1) {
+            PWMDifferent = true;
+          }
+          lPWMValue = outputInfo[index].value;
+        }
+        break;
+      default:
+        response += "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"n/a\",\"type\":\"type unknown\"}";
+        break;
+    }
+  }
+  response += "]";
+
+  //sensors
+  response += ", \"sensors\":[";
+  for (int index = 0; index < sensorQuantity; index++) {
+    if (index > 0) {
+      response += ", ";
+    }
+    String lValue = "ON";
+    switch (sensorInfo[index].type) {
+      case sDigital:
+        if (sensorInfo[index].value == 0) {
+          lValue = "OFF";
+        }
+        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + lValue + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\"}";
+        break;
+      case sAnalog:
+        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + String(sensorInfo[index].value) + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\"}";
+        break;
+      case sAnalogButtons:
+        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + String(sensorInfo[index].value) + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\", \"buttons\":[";
+        //response += processAnalogButtonArrayJson(sensorInfo[index]);
+        response += "]}";
+        break;
+      default:
+        response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"type unknown\"}";
+        break;
+    }    
+  }
+  response += "]";
+
+  //gezamelijk
+  response += ", \"generals\":[";
+
+  if (!LEDDifferent) {
+    String lValue = "ON";
+    if (lLEDValue == 0) {
+      lValue = "OFF";
+    }
+    response += "{\"name\":\"LEDS\", \"value\":\"" + lValue + "\"}";
+  }
+  if (!LEDDifferent && !PWMDifferent) {
+    response += ", ";
+  }
+  if (!PWMDifferent) {
+    response += "{\"name\":\"PWMS\", \"value\":\"" + String(lPWMValue) + "\"}";
+  }
+  response += "]";
+
+  //extras, like scene, debug status, ...
+  response += ", \"extra\":[{\"name\":\"scene\", \"value\":\"";
+  response += getSceneTypeName(sceneInfo.active);
+  response += "\"}";
+  response += ", {\"name\":\"steps\", \"value\":\"";
+  response += String(sceneInfo.active);
+  response += "\"}";
+  response += ", {\"name\":\"pause\", \"value\":\"";
+  response += String(sceneInfo.active);
+  response += "\"}";
+  response += ", {\"name\":\"debug\", \"value\":\"";
+  if (getDebug()) {
+    response += "ON";
+  } else {
+    response += "OFF";
+  }
+  response += "\"}, {\"name\":\"debugPin\", \"value\":\"";
+  if (getDebugPinState()) {
+    response += "ON";
+  } else {
+    response += "OFF";
+  }
+  response += "\"}";
+  response += "]}";
+
+  debugLineToSerial(response);
+
+  restSrv.send(200, "text/json", response);
+}
+
 // Define routing
 void restServerRouting() {
   restSrv.on("/", HTTP_GET, []() {
@@ -652,7 +725,8 @@ void loopBOARDsensors() {
         setSensorValue(index, processSensor(sensorInfo[index]));
         break;
       case sAnalogButtons:
-        setSensorValue(index, processAnalogButtonArray(sensorInfo[index]));
+        setSensorValue(index, analogRead(sensorInfo[index].pin));
+        delay(sensorInfo[index].readDelay);
         break;
       default:
         break;
@@ -660,7 +734,7 @@ void loopBOARDsensors() {
   }
 }
 
-void loopBOARDoutputs(String request) {
+void loopHTTPBoardOutputs(String request) {
   for (int index = 0; index < outputQuantity; index++) {
     switch (outputInfo[index].type) {
       case oLED:
@@ -677,14 +751,13 @@ void loopBOARDoutputs(String request) {
   wifiInfo.httpRefreshRate = processRefresh(request, wifiInfo.httpRefreshRate);
 }
 
-void loopSerialDebug() {
+void loopHTTPDebug() {
   delay(1);
-  Serial.println/*debugLineToSerial*/("Client disonnected");
-  Serial.println/*debugLineToSerial*/("");
-
-  Serial.print/*debugToSerial*/("Main - Refreshing at rate ");
-  Serial.println/*debugLineToSerial*/(wifiInfo.httpRefreshRate);
-  Serial.println/*debugLineToSerial*/("");
+  debugLineToSerial("Client disonnected");
+  debugLineToSerial("");
+  debugToSerial("Main - Refreshing at rate ");
+  debugLineToSerial(wifiInfo.httpRefreshRate);
+  debugLineToSerial("");
 }
 
 void initiate() {
@@ -719,7 +792,7 @@ void loopScene() {
     for (int index = 0; index < outputQuantity; index++) {
       switch (outputInfo[index].type) {
         case oPWM:
-          processRestPWMScene(outputInfo[index].name, outputInfo[index].value, outputInfo[index].pin);
+          processPWM(outputInfo[index].value, outputInfo[index].pin);
           break;
         default:
           break;
@@ -730,31 +803,21 @@ void loopScene() {
 }
 
 void loop() {
-  if (!loopFirstT) {
-    //Serial.println("first time loop not yet succeded...");
-    delay(100);
-  }
   loopREST();
   loopScene();
   loopBOARDsensors();
   HtmlStruct httpData;
   httpData.client = httpSrv.available();
-  delay(100);
-  if (!httpData.client) {
-    Serial.println("httpsrv not available");
-    return;
-  } else {
-    Serial.println("!!!! httpsrv is available !!!!");
-  }
-  debugLineToSerial("Waiting for new client");
-  while(!httpData.client.available()) {
-    delay(1);
-  }
-  httpData.request = httpData.client.readStringUntil('\r');
-  debugLineToSerial(httpData.request);
-  httpData.client.flush();
-  loopBOARDoutputs(httpData.request);
-  loopHTTPpage(httpData.client);
-  loopFirstT = true;
-  loopSerialDebug();
-} 
+  if (httpData.client) {
+    debugLineToSerial("Waiting for new client");
+    while(!httpData.client.available()) {
+      delay(1);
+    }
+    httpData.request = httpData.client.readStringUntil('\r');
+    debugLineToSerial(httpData.request);
+    httpData.client.flush();
+    loopHTTPBoardOutputs(httpData.request);
+    loopHTTPpage(httpData.client);
+    loopHTTPDebug();
+  }  
+}

@@ -54,6 +54,9 @@ typedef struct {
   int multiplier;
   int buttonQty;
   buttonTypes buttontypes[4];
+  int buttonIncrease;
+  int buttonDecrease;
+  int readDelay;
 } SensorStruct;
 
 typedef struct {

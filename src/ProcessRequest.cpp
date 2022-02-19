@@ -33,13 +33,9 @@ int processHtmlPWM(String request, String obj, int aValue, int iPwm) {
   return iValue;
 }
 
-int processRestPWM(String obj, int aValue, int iPwm) {
+int processPWM(int aValue, int iPwm) {
   analogWrite(iPwm, aValue);
   return aValue;
-}
-
-void processRestPWMScene(String obj, int aValue, int iPwm) {
-  analogWrite(iPwm, aValue);
 }
 
 int processRefresh(String request, int arefreshrate) {

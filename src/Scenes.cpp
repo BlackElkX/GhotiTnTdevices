@@ -72,7 +72,11 @@ void allUpDownAlternating() {
 }
 
 void oddUpDown() {
-  for (int index = 1; index < outputQuantity; index + 2) {
+  for (int index = 1; index < outputQuantity + 1; index + 2) {
+    int usedIndex = index;
+    if (usedIndex > outputQuantity) {
+      usedIndex = 0;
+    }
     checkFirstRun(index);
     setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
     switchSceneDirection(index);

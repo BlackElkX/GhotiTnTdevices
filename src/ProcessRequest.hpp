@@ -7,8 +7,7 @@
 
 int processLED(String request, String obj, int iValue, int iLed);
 int processHtmlPWM(String request, String obj, int iValue, int iPwm);
-int processRestPWM(String obj, int aValue, int iPwm);
-void processRestPWMScene(String obj, int aValue, int iPwm) ;
+int processPWM(int aValue, int iPwm);
 int processRefresh(String request, int arefreshrate);
 
 #endif

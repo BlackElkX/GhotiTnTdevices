@@ -6,7 +6,7 @@
 //#pragma once
 
 int processSensor(SensorStruct sensor);
-int processDigitalInput(SensorStruct sensor);
 int processAnalogButtonArray(SensorStruct sensor);
+int processDigitalInput(SensorStruct sensor);
 
 #endif

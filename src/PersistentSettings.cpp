@@ -175,6 +175,9 @@ SensorStruct getSensor(int index) {
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
     sensor.buttontypes[btnIndex] = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
   }
+  sensor.buttonIncrease = sensorArray[index]["buttonIncrease"];
+  sensor.buttonDecrease = sensorArray[index]["buttonDecrease"];
+  sensor.readDelay      = sensorArray[index]["readDelay"];
   return sensor;
 }
 

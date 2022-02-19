@@ -97,7 +97,10 @@
       "maxremap": 255,
       "multiplier": 1,
       "buttonQty": 4,
-      "buttonfunctions":["bPower", "bUp", "bDown", "bProgram"]
+      "buttonfunctions":["bPower", "bUp", "bDown", "bProgram"],
+      "buttonIncrease": 5,
+      "buttonDecrease": 5,
+      "readDelay": 5
     }
   ]
 }

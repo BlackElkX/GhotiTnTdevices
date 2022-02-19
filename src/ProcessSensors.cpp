@@ -17,20 +17,10 @@ int processSensor(SensorStruct sensor) {
   return iValue;
 }
 
-int processDigitalInput(SensorStruct sensor) {
-  int iValue = sensor.value;
-  int nValue = digitalRead(sensor.pin);
-//  debugLineToSerial("Button " + String(aSensor) + " gives " + String(nValue));
-  //Serial.print("read = " + String(nValue) + "    ");
-  if (nValue != iValue) {
-    iValue = nValue;
-  }
-  return iValue;
-}
-
 int processAnalogButtonArray(SensorStruct sensor) {
   //int iValue = aValue;
   int nValue = analogRead(sensor.pin);
+  //Serial.println(String(A0) + "  == " + String(sensor.pin) + " read = " + String(nValue) + "    ");
   //Serial.print("read = " + String(nValue) + "    ");
   //debugLineToSerial("Sensor " + String(aSensor) + " gives " + String(nValue));
   //int maxValue = iValue + (aHysteresis / 2);
@@ -38,5 +28,12 @@ int processAnalogButtonArray(SensorStruct sensor) {
   //if ((nValue < minValue) || (nValue > maxValue)) {
   //  iValue = nValue;
   //}
+  return nValue;
+}
+
+int processDigitalInput(SensorStruct sensor) {
+  int nValue = digitalRead(sensor.pin);
+//  debugLineToSerial("Button " + String(aSensor) + " gives " + String(nValue));
+  //Serial.print("read = " + String(nValue) + "    ");
   return nValue;
 }
