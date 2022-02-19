@@ -173,7 +173,9 @@ SensorStruct getSensor(int index) {
   sensor.multiplier = sensorArray[index]["multiplier"];
   sensor.buttonQty  = sensorArray[index]["buttonQty"];
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
-    sensor.buttontypes[btnIndex] = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
+    sensor.buttontypes[btnIndex]  = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
+    sensor.buttonValues[btnIndex] = sensorArray[index]["buttonValues"][btnIndex];
+    //Serial.println("button value for " + String(index) + " = " + String(sensor.buttonValues[btnIndex]));
   }
   sensor.buttonIncrease = sensorArray[index]["buttonIncrease"];
   sensor.buttonDecrease = sensorArray[index]["buttonDecrease"];

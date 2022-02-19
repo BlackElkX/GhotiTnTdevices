@@ -474,23 +474,27 @@ void processAnalogButton(SensorStruct sensor) {
 
 String processAnalogButtonArrayJson(SensorStruct sensor) {
   String result = "";
-  int divider = (sensor.maxValue - sensor.minValue) / sensor.buttonQty;
-  debugToSerial("divider = " + String(divider));
+  //int divider = (sensor.maxValue - sensor.minValue) / sensor.buttonQty;
+  //debugToSerial("divider = " + String(divider));
   for (int index = 0; index < sensor.buttonQty; index++) {
     if (index > 0) {
       result += ", ";
     }
-    int low  = divider * (index);
-    int high = divider * (index + 1);
-    debugToSerial("     index = "  + String(index) + " low = "    + String(low) + " high = "   + String(high) + " value = "  + String(sensor.value));
+    result += "{\"name\": \"" + sensor.name + "-" + String(index + 1);
+    int low  = sensor.buttonValues[index] - sensor.hysteresis;
+    int high = sensor.buttonValues[index] + sensor.hysteresis;
+    Serial.print("     index = "  + String(index) + " low = "    + String(low) + " high = "   + String(high) + " value = "  + String(sensor.value));
     if ((sensor.value > low) && (sensor.value < high)) {
-      result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":\"ON\", \"type\": \"" + getButtonTypeName(sensor.buttontypes[index]) + "\"}";
+      result += "\", \"value\":\"ON\"";
       processAnalogButton(sensor);
+      Serial.println("    OM");
     } else {
-      result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":\"OFF\"}";
+      result += "\", \"value\":\"OFF\"";
+      Serial.println("    OFF");
     }
+    result += ", \"type\": \"" + getButtonTypeName(sensor.buttontypes[index]) + "\"}";
   }
-  debugLineToSerial(" "/* + result*/);
+  debugLineToSerial(" " + result);
   return result;
 }
 
@@ -557,7 +561,7 @@ void getStatus() {
         break;
       case sAnalogButtons:
         response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + String(sensorInfo[index].value) + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\", \"buttons\":[";
-        //response += processAnalogButtonArrayJson(sensorInfo[index]);
+        response += processAnalogButtonArrayJson(sensorInfo[index]);
         response += "]}";
         break;
       default:
