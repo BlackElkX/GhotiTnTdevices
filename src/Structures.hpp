@@ -50,6 +50,7 @@ typedef struct {
 typedef struct {
   int pin;
   int value;
+  int counter;
   String name;
   String pinName;
   sensorTypes type;

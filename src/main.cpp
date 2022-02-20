@@ -116,7 +116,8 @@ String processOutput(String obj, String value) {
           result = "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + lValue + "\"}";
           break;
         case oPWM:
-          setOutputValue(index, processPWM(value.toInt(), outputInfo[index].pin));
+          analogWrite(outputInfo[index].pin, value.toInt());
+          setOutputValue(index, value.toInt());
           result = "{\"name\":\"" + outputInfo[index].name + "\", \"value\":\"" + String(outputInfo[index].value) + "\"}";
           break;
         default:
@@ -183,7 +184,8 @@ void setAllOffBtn() {
         setOutputValue(index, LOW);
         break;
       case oPWM:
-        setOutputValue(index, processPWM(0, outputInfo[index].pin));
+        analogWrite(outputInfo[index].pin, 0);
+        setOutputValue(index, 0);
         break;
       default:
         break;
@@ -218,7 +220,8 @@ void setAllOff() {
 void setAllHalfBtn() {
   for (int index = 0; index < outputQuantity; index++) {
     if (outputInfo[index].type == oPWM) {
-      setOutputValue(index, processPWM(127, outputInfo[index].pin));
+      analogWrite(outputInfo[index].pin, 127);
+      setOutputValue(index, 127);
     }
   }
 }
@@ -281,7 +284,8 @@ void setAllValueBtn(int amount) {
       if (newValue > 255) {
         newValue = 255;
       }
-      setOutputValue(index, processPWM(newValue, outputInfo[index].pin));
+      analogWrite(outputInfo[index].pin, newValue);
+      setOutputValue(index, newValue);
     }
   }
 }
@@ -444,7 +448,7 @@ void setPauseScene() {
   restSrv.send(200, "text/json", response);
 }
 
-void processAnalogButton(SensorStruct sensor, int btnIndex) {
+void startActionOfAnalogButton(SensorStruct sensor, int btnIndex) {
 //  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
 //    unsigned long timestamp = millis() + sensor.readTimeout;
 //    Serial.println(String(sensor.btnArray[btnIndex].timePress) + " < " + String(timestamp));
@@ -479,24 +483,34 @@ void processAnalogButton(SensorStruct sensor, int btnIndex) {
 //  }
 }
 
-String processAnalogButtonArrayJson(SensorStruct sensor) {
+void processAnalogButtonArray(int index) {
+  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
+    int low  = sensorInfo[index].btnArray[btnIndex].resitor - sensorInfo[index].hysteresis;
+    int high = sensorInfo[index].btnArray[btnIndex].resitor + sensorInfo[index].hysteresis;
+    if ((sensorInfo[index].value > low) && (sensorInfo[index].value < high)) {
+      if (!sensorInfo[index].btnArray[btnIndex].pressed) {
+        Serial.print(sensorInfo[index].name + "-" + String(btnIndex + 1) + " resistor="
+        + String(sensorInfo[index].btnArray[btnIndex].resitor) + " low=" + String(low) + " high=" + String(high));
+        Serial.print("    resistor between low and high");
+        Serial.println("    button was not pressed, but now, it is");
+        sensorInfo[index].btnArray[btnIndex].pressed = true;
+        startActionOfAnalogButton(sensorInfo[index], btnIndex);
+      }
+    } else {
+//      Serial.print("    button is set to not pressed");
+      sensorInfo[index].btnArray[btnIndex].pressed = false;
+    }
+//    Serial.println("");
+  }
+}
+
+String getAnalogButtonArrayDetails(SensorStruct sensor) {
   String result = "";
   for (int index = 0; index < 4; index++) {
     if (index > 0) {
       result += ", ";
     }
     result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":";
-    int low  = sensor.btnArray[index].resitor - sensor.hysteresis;
-    int high = sensor.btnArray[index].resitor + sensor.hysteresis;
-    if ((sensor.value > low) && (sensor.value < high)) {
-      if (!sensor.btnArray[index].pressed) {
-        Serial.println(sensor.name + "-" + String(index + 1) + " button is pressed");
-        sensor.btnArray[index].pressed = true;
-        processAnalogButton(sensor, index);
-      }
-    } else {
-      sensor.btnArray[index].pressed = false;
-    }
     if (sensor.btnArray[index].pressed) {
       result += "\"ON\"";
     } else {
@@ -571,7 +585,7 @@ void getStatus() {
         break;
       case sAnalogButtons:
         response += "{\"name\":\"" + sensorInfo[index].name + "\", \"value\":\"" + String(sensorInfo[index].value) + "\", \"type\":\"" + getSensorTypeName(sensorInfo[index].type) + "\", \"buttons\":[";
-        response += processAnalogButtonArrayJson(sensorInfo[index]);
+        response += getAnalogButtonArrayDetails(sensorInfo[index]);
         response += "]}";
         break;
       default:
@@ -728,32 +742,61 @@ void loopHTTPpage(WiFiClient client) {
 }
 /*  end regular html page server  */
 
-void loopBOARDsensors() {
-  for (int index = 0; index < sensorQuantity; index++) {
-    int iValue = sensorInfo[index].value;
-    int nValue;
-    int maxValue = iValue + (sensorInfo[index].hysteresis / 2);
-    int minValue = iValue - (sensorInfo[index].hysteresis / 2);
-    switch (sensorInfo[index].type) {
-      case sDigital:
-        setSensorValue(index, digitalRead(sensorInfo[index].pin));
-        break;
-      case sAnalog:
-        nValue = analogRead(sensorInfo[index].pin);
-        //debugLineToSerial("Sensor " + String(aSensor) + " gives " + String(nValue));
-        //Serial.print("read = " + String(nValue) + "    ");
-        if ((nValue < minValue) || (nValue > maxValue)) {
-          iValue = nValue;
-        }
-        setSensorValue(index, iValue);
-        break;
-      case sAnalogButtons:
-        setSensorValue(index, analogRead(sensorInfo[index].pin));
-        break;
-      default:
-        break;
+void readDigitalSensor(int index) {
+  int newSensorValue = digitalRead(sensorInfo[index].pin);
+  if ((newSensorValue == sensorInfo[index].value)
+   && (sensorInfo[index].counter > 0)) {
+     sensorInfo[index].counter--;
+   }
+  if (newSensorValue == sensorInfo[index].value) {
+    sensorInfo[index].counter++;
+  }
+  if (sensorInfo[index].counter >= sensorInfo[index].debounceCount) {
+    sensorInfo[index].counter = 0;
+    sensorInfo[index].value = newSensorValue;
+  }
+}
+
+void readAnalogSensor(int index) {
+  int oldValue = sensorInfo[index].value;
+  int newValue = analogRead(sensorInfo[index].pin);
+  int maxValue = oldValue + (sensorInfo[index].hysteresis / 2);
+  int minValue = oldValue - (sensorInfo[index].hysteresis / 2);
+  if ((newValue < minValue) || (newValue > maxValue)) {
+    //Serial.println("old = " + String(oldValue) + " new = " + String(newValue) + " max = " + String(maxValue) + " min = " + String(minValue));
+    oldValue = newValue;
+    if ((newValue == sensorInfo[index].value)
+     && (sensorInfo[index].counter > 0)) {
+      sensorInfo[index].counter--;
+     }
+    if (newValue == sensorInfo[index].value) {
+      sensorInfo[index].counter++;
     }
-    delay(sensorInfo[index].readDelay);
+    if (sensorInfo[index].counter >= sensorInfo[index].debounceCount) {
+      sensorInfo[index].counter = 0;
+      sensorInfo[index].value = newValue;
+    }
+    if (sensorInfo[index].type == sAnalogButtons) {
+      //check whish button
+      processAnalogButtonArray(index);
+    } else {
+      //process value from sensor
+    }
+  }
+}
+
+unsigned long timestamp;
+void loopBOARDsensors() {
+  if (millis() != timestamp) {
+    for (int index = 0; index < sensorQuantity; index++) {
+      if (sensorInfo[index].type == sDigital) {
+        readDigitalSensor(index);
+      } else {
+        readAnalogSensor(index);
+      }
+      delay(sensorInfo[index].readDelay);
+    }
+    timestamp = millis();
   }
 }
 
@@ -815,7 +858,7 @@ void loopScene() {
     for (int index = 0; index < outputQuantity; index++) {
       switch (outputInfo[index].type) {
         case oPWM:
-          processPWM(outputInfo[index].value, outputInfo[index].pin);
+          analogWrite(outputInfo[index].pin, outputInfo[index].value);
           break;
         default:
           break;

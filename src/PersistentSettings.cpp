@@ -177,7 +177,7 @@ SensorStruct getSensor(int index) {
   sensor.debounceCount    = sensorArray[index]["debounceCount"];
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
     sensor.btnArray[btnIndex].types     = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
-    sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonResitorValues"][btnIndex];
+    sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonValues"][btnIndex];
     sensor.btnArray[btnIndex].timePress = millis();
     sensor.btnArray[btnIndex].pressed   = false;
     //sensor.buttontypes[btnIndex]  = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
