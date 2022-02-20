@@ -50,8 +50,6 @@ bool readConfig() {
   debugLineToSerial("file is read:");
   DeserializationError error = deserializeJson(jsonDoc, buf.get());
   configJson = jsonDoc.as<JsonObject>();
-  //configJson["error"] = "";
-  //configJson.printTo(Serial);
   debugLineToSerial(String(configJson));
     
   file.close();
@@ -91,12 +89,7 @@ bool saveConfig(JsonObject& configJson) {
   serializeJson(configJson, file);
   file.close();
   debugLineToSerial("config saved to file");
-  return readConfig(/*configJson*/);
-}
-
-void printConfig() {
-  Serial.println("configJson");
-  //debugLineToSerial(String(*configJson));
+  return readConfig();
 }
 
 String getDeviceName() {
@@ -172,16 +165,13 @@ SensorStruct getSensor(int index) {
   sensor.maxRemap         = sensorArray[index]["maxremap"];
   sensor.multiplier       = sensorArray[index]["multiplier"];
   sensor.readDelay        = sensorArray[index]["readDelay"];
-  sensor.btnArrayIncrease = sensorArray[index]["btnArrayIncrease"];
-  sensor.btnArrayDecrease = sensorArray[index]["btnArrayDecrease"];
+  sensor.btnArrayIncrease = sensorArray[index]["buttonIncrease"];
+  sensor.btnArrayDecrease = sensorArray[index]["buttonDecrease"];
   sensor.debounceCount    = sensorArray[index]["debounceCount"];
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
     sensor.btnArray[btnIndex].types     = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
     sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonValues"][btnIndex];
-    sensor.btnArray[btnIndex].timePress = millis();
     sensor.btnArray[btnIndex].pressed   = false;
-    //sensor.buttontypes[btnIndex]  = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
-    //sensor.buttonResitorValues[btnIndex] = sensorArray[index]["buttonResitorValues"][btnIndex];
   }
   return sensor;
 }

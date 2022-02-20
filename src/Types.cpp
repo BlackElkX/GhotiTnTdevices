@@ -3,15 +3,53 @@
 
 #define IDNAME(name) #name
 
-char* outputTypeNames[] = {IDNAME(oLED),     IDNAME(oPWM),    IDNAME(oNone)};
-
-char* sensorTypeNames[] = {IDNAME(sDigital), IDNAME(sAnalog), IDNAME(sAnalogButtons), IDNAME(sNone)};
-
 char* sceneTypeNames[]  = {IDNAME(scAllUpDown), IDNAME(scAllUpDownFollowing), IDNAME(scAllUpDownAlternating),
                            IDNAME(scOddUpDown), IDNAME(scEvenUpDown),         IDNAME(scAllRandom),
                            IDNAME(scNone)};
 
+char* outputTypeNames[] = {IDNAME(oLED),     IDNAME(oPWM),    IDNAME(oNone)};
+
+char* sensorTypeNames[] = {IDNAME(sDigital), IDNAME(sAnalog), IDNAME(sAnalogButtons), IDNAME(sNone)};
+
 char* buttonTypeNames[] = {IDNAME(bPower), IDNAME(bUp), IDNAME(bDown), IDNAME(bProgram), IDNAME(bNone)};
+
+String getSceneTypeName(sceneTypes scene) {
+  return String(sceneTypeNames[scene]);
+}
+
+sceneTypes getSceneTypeFromName(String name) {
+  for (sceneTypes scene = scAllUpDown; scene <= scNone; scene = sceneTypes(scene + 1)) {
+    if (getSceneTypeName(scene) == name) {
+      return scene;
+    }
+  }
+  return scNone;
+}
+
+sceneTypes getNextSceneType(sceneTypes scene) {
+  sceneTypes newScene = scNone;
+  switch (scene) {
+  case scAllUpDown:
+    newScene = scAllUpDownFollowing;
+    break;
+  case scAllUpDownFollowing:
+    newScene = scAllUpDownAlternating;
+    break;
+    case scAllUpDownAlternating:
+    newScene = scOddUpDown;
+    break;
+  case scOddUpDown:
+    newScene = scEvenUpDown;
+    break;
+  case scEvenUpDown:
+    newScene = scAllRandom;
+    break;
+  default:
+    newScene = scAllUpDown;
+    break;
+  }
+  return newScene;
+}
 
 String getOutputTypeName(outputTypes outputType) {
   return String(outputTypeNames[outputType]);
@@ -37,19 +75,6 @@ sensorTypes getSensorTypeFromName(String name) {
     }
   }
   return sNone;
-}
-
-String getSceneTypeName(sceneTypes scene) {
-  return String(sceneTypeNames[scene]);
-}
-
-sceneTypes getSceneTypeFromName(String name) {
-  for (sceneTypes scene = scAllUpDown; scene <= scNone; scene = sceneTypes(scene + 1)) {
-    if (getSceneTypeName(scene) == name) {
-      return scene;
-    }
-  }
-  return scNone;
 }
 
 String getButtonTypeName(buttonTypes button) {

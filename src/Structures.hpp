@@ -43,7 +43,7 @@ typedef struct {
 typedef struct {
   buttonTypes types;
   int resitor;
-  unsigned long timePress;
+  //unsigned long timePress;
   bool pressed;
 } BtnArrayStruct;
 

@@ -13,6 +13,9 @@ A rest api is available.
 
 Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
 
+Known bugs:
+- programs not working except scnone, scAllUpDown and scRandom
+
 Todo:
 - a switch to disable wifi functionality (only when power is off, you can use it. If powered, the switch will not be checked)
 - a power switch (only on hardware level)
@@ -25,10 +28,10 @@ Todo:
 - ...
 
 Started:
-- 4 buttons using the A0 analog pin to use it stand-alone
 
 Done:
 - adding documentation about the rest api.
+- 4 buttons using the A0 analog pin to use it stand-alone
 
 To build this, I use platformio in visual studio code on Mac, Linux and Windows.
 
