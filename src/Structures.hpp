@@ -45,7 +45,7 @@ typedef struct {
   int resitor;
   unsigned long timePress;
   bool pressed;
-} btnArrayStruct;
+} BtnArrayStruct;
 
 typedef struct {
   int pin;
@@ -59,12 +59,11 @@ typedef struct {
   int minRemap;
   int maxRemap;
   int multiplier;
-  int buttonQty;
   int readDelay;
-  unsigned long readTimeout;
   int btnArrayIncrease;
   int btnArrayDecrease;
-  btnArrayStruct btnArray[4];
+  int debounceCount;
+  BtnArrayStruct btnArray[4];
 } SensorStruct;
 
 typedef struct {

@@ -444,13 +444,12 @@ void setPauseScene() {
   restSrv.send(200, "text/json", response);
 }
 
-void processAnalogButton(SensorStruct sensor) {
-  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
-    unsigned long timestamp = millis() + sensor.readTimeout;
-    Serial.println(String(sensor.btnArray[btnIndex].timePress) + " < " + String(timestamp));
-    if ((sensor.btnArray[btnIndex].pressed) && (sensor.btnArray[btnIndex].timePress < timestamp)) {
-      Serial.println(" button is pressed");
-      sensor.btnArray[btnIndex].timePress = timestamp;
+void processAnalogButton(SensorStruct sensor, int btnIndex) {
+//  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
+//    unsigned long timestamp = millis() + sensor.readTimeout;
+//    Serial.println(String(sensor.btnArray[btnIndex].timePress) + " < " + String(timestamp));
+//    if ((sensor.btnArray[btnIndex].pressed) && (sensor.btnArray[btnIndex].timePress < timestamp)) {
+//      sensor.btnArray[btnIndex].timePress = timestamp;
       switch (sensor.btnArray[btnIndex].types) {
         case bPower:
           if (checkAllOutputsOn()) {
@@ -476,26 +475,32 @@ void processAnalogButton(SensorStruct sensor) {
         default:
           break;
       }
-    }
-  }
+//    }
+//  }
 }
 
 String processAnalogButtonArrayJson(SensorStruct sensor) {
   String result = "";
-  for (int index = 0; index < sensor.buttonQty; index++) {
+  for (int index = 0; index < 4; index++) {
     if (index > 0) {
       result += ", ";
     }
-    result += "{\"name\": \"" + sensor.name + "-" + String(index + 1);
+    result += "{\"name\": \"" + sensor.name + "-" + String(index + 1) + "\", \"value\":";
     int low  = sensor.btnArray[index].resitor - sensor.hysteresis;
     int high = sensor.btnArray[index].resitor + sensor.hysteresis;
     if ((sensor.value > low) && (sensor.value < high)) {
-      result += "\", \"value\":\"ON\"";
-      sensor.btnArray[index].pressed = true;
-      processAnalogButton(sensor);
+      if (!sensor.btnArray[index].pressed) {
+        Serial.println(sensor.name + "-" + String(index + 1) + " button is pressed");
+        sensor.btnArray[index].pressed = true;
+        processAnalogButton(sensor, index);
+      }
     } else {
       sensor.btnArray[index].pressed = false;
-      result += "\", \"value\":\"OFF\"";
+    }
+    if (sensor.btnArray[index].pressed) {
+      result += "\"ON\"";
+    } else {
+      result += "\"OFF\"";
     }
     result += ", \"type\": \"" + getButtonTypeName(sensor.btnArray[index].types) + "\"}";
   }

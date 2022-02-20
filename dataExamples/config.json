@@ -96,11 +96,10 @@
       "minremap": 0,
       "maxremap": 255,
       "multiplier": 1,
-      "buttonQty": 4,
       "buttonIncrease": 5,
       "buttonDecrease": 5,
       "readDelay": 5,
-      "readTimeout": 500,
+      "debounceCount": 10,
       "buttonfunctions":["bPower", "bUp", "bDown", "bProgram"],
       "buttonValues": [10, 550, 730, 815]
     }

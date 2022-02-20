@@ -160,22 +160,21 @@ int getSensorQty() {
 SensorStruct getSensor(int index) {
   JsonArray sensorArray = configJson["sensors"].as<JsonArray>();
   SensorStruct sensor;
-  sensor.value      = sensorArray[index]["value"];
-  sensor.name       = String(sensorArray[index]["name"]);
-  sensor.pin        = sensorArray[index]["pin"];
-  sensor.pinName    = String(sensorArray[index]["pinName"]);
-  sensor.type       = getSensorTypeFromName(sensorArray[index]["type"]);
-  sensor.hysteresis = sensorArray[index]["hysteresis"];
-  sensor.minValue   = sensorArray[index]["minvalue"];
-  sensor.maxValue   = sensorArray[index]["maxvalue"];
-  sensor.minRemap   = sensorArray[index]["minremap"];
-  sensor.maxRemap   = sensorArray[index]["maxremap"];
-  sensor.multiplier = sensorArray[index]["multiplier"];
-  sensor.buttonQty  = sensorArray[index]["buttonQty"];
+  sensor.value            = sensorArray[index]["value"];
+  sensor.name             = String(sensorArray[index]["name"]);
+  sensor.pin              = sensorArray[index]["pin"];
+  sensor.pinName          = String(sensorArray[index]["pinName"]);
+  sensor.type             = getSensorTypeFromName(sensorArray[index]["type"]);
+  sensor.hysteresis       = sensorArray[index]["hysteresis"];
+  sensor.minValue         = sensorArray[index]["minvalue"];
+  sensor.maxValue         = sensorArray[index]["maxvalue"];
+  sensor.minRemap         = sensorArray[index]["minremap"];
+  sensor.maxRemap         = sensorArray[index]["maxremap"];
+  sensor.multiplier       = sensorArray[index]["multiplier"];
   sensor.readDelay        = sensorArray[index]["readDelay"];
   sensor.btnArrayIncrease = sensorArray[index]["btnArrayIncrease"];
   sensor.btnArrayDecrease = sensorArray[index]["btnArrayDecrease"];
-  sensor.readTimeout      = sensorArray[index]["readTimeout"];
+  sensor.debounceCount    = sensorArray[index]["debounceCount"];
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
     sensor.btnArray[btnIndex].types     = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
     sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonResitorValues"][btnIndex];
