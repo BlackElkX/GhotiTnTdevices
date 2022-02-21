@@ -22,9 +22,8 @@ A rest api is available.
 
 Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
 
-Known bugs:
-
-V 0.0.5 - Initial production version
+V 0.0.5 - Initial production version.
+-------------------------------------
 
 Solved bugs:
 - programs not working except scnone, scAllUpDown and scRandom
