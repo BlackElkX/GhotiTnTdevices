@@ -51,13 +51,13 @@ Done:
 To build this, I use platformio in visual studio code on Mac, Linux and Windows.
 
 Upload is as follow:
- 1 in platformio.ini, select the correct board.
- 2 edit the data/config.json file, to meet your desired configuration
-   tip: set debug.enabled on true, for first attempt to use it.
-        also, put your ssid and passphrase here before building the file system.
- 3 in the platformio tab -> general -> Build to build it. (or below the screen, the V)
- 4 in the platformio tab -> platform -> Build Filesystem Image
- 5 in the platformio tab -> platform -> Upload Filesystem Image
- 6 in the platformio tab -> general -> Upload. (or below the screen, the ->)
+ 1) in platformio.ini, select the correct board.
+ 2) edit the data/config.json file, to meet your desired configuration
+    tip: set debug.enabled on true, for first attempt to use it.
+         also, put your ssid and passphrase here before building the file system.
+ 3) in the platformio tab -> general -> Build to build it. (or below the screen, the V)
+ 4) in the platformio tab -> platform -> Build Filesystem Image
+ 5) in the platformio tab -> platform -> Upload Filesystem Image
+ 6) in the platformio tab -> general -> Upload. (or below the screen, the ->)
  
  you can check the serial monitor if it is working and to get the ip address.
