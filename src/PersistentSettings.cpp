@@ -153,25 +153,31 @@ int getSensorQty() {
 SensorStruct getSensor(int index) {
   JsonArray sensorArray = configJson["sensors"].as<JsonArray>();
   SensorStruct sensor;
-  sensor.value            = sensorArray[index]["value"];
-  sensor.name             = String(sensorArray[index]["name"]);
   sensor.pin              = sensorArray[index]["pin"];
+  sensor.value            = sensorArray[index]["value"];
+  sensor.readDelay        = sensorArray[index]["readDelay"];
+  sensor.debounceCount    = sensorArray[index]["debounceCount"];
+  sensor.name             = String(sensorArray[index]["name"]);
   sensor.pinName          = String(sensorArray[index]["pinName"]);
   sensor.type             = getSensorTypeFromName(sensorArray[index]["type"]);
-  sensor.hysteresis       = sensorArray[index]["hysteresis"];
-  sensor.minValue         = sensorArray[index]["minvalue"];
-  sensor.maxValue         = sensorArray[index]["maxvalue"];
-  sensor.minRemap         = sensorArray[index]["minremap"];
-  sensor.maxRemap         = sensorArray[index]["maxremap"];
-  sensor.multiplier       = sensorArray[index]["multiplier"];
-  sensor.readDelay        = sensorArray[index]["readDelay"];
-  sensor.btnArrayIncrease = sensorArray[index]["buttonIncrease"];
-  sensor.btnArrayDecrease = sensorArray[index]["buttonDecrease"];
-  sensor.debounceCount    = sensorArray[index]["debounceCount"];
-  for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
-    sensor.btnArray[btnIndex].types     = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
-    sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonValues"][btnIndex];
-    sensor.btnArray[btnIndex].pressed   = false;
+  if (sensor.type == sDigital) {
+    sensor.digitalFunction = sensorArray[index]["digitalFunction"];
+  } else {
+    sensor.hysteresis       = sensorArray[index]["hysteresis"];
+    sensor.minValue         = sensorArray[index]["minvalue"];
+    sensor.maxValue         = sensorArray[index]["maxvalue"];
+    sensor.minRemap         = sensorArray[index]["minremap"];
+    sensor.maxRemap         = sensorArray[index]["maxremap"];
+    sensor.multiplier       = sensorArray[index]["multiplier"];
+    if (sensor.type == sAnalogButtons) {
+      sensor.btnArrayIncrease = sensorArray[index]["buttonIncrease"];
+      sensor.btnArrayDecrease = sensorArray[index]["buttonDecrease"];
+      for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
+        sensor.btnArray[btnIndex].types     = getButtonTypeFromName(sensorArray[index]["buttonfunctions"][btnIndex]);
+        sensor.btnArray[btnIndex].resitor   = sensorArray[index]["buttonValues"][btnIndex];
+        sensor.btnArray[btnIndex].pressed   = false;
+      }
+    }
   }
   return sensor;
 }

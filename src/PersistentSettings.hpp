@@ -8,7 +8,7 @@
 
 //#pragma once
 
-bool         readConfig(/*JsonObject& configJson*/);
+bool         readConfig();
 bool         saveConfig(JsonObject& configJson);
 void         printConfig();
 String       getDeviceName();

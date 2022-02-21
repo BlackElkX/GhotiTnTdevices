@@ -10,9 +10,8 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-//#include "main.hpp"
 
-#define  VERSION_STRING "0.0.5"
+#define  VERSION_STRING "0.0.6"
 
 extern DebugStruct debugInfo;
 extern HtmlStruct  htmlInfo;
@@ -476,6 +475,30 @@ void startActionOfAnalogButton(int index, int btnIndex) {
   }
 }
 
+void startActionOfDigitalButton(int index) {
+  switch (sensorInfo[index].digitalFunction) {
+    case bPower:
+      if (checkAllOutputsOn()) {
+        setAllOffBtn();
+      } else {
+        setAllHalfBtn();
+      }
+      break;
+    case bUp:
+      setAllValueBtn(sensorInfo[index].btnArrayIncrease);
+      break;
+    case bDown:
+      setAllValueBtn(-sensorInfo[index].btnArrayDecrease);
+      break;
+    case bProgram:
+      sceneInfo.active = getNextSceneType(sceneInfo.active);
+      startScene();
+      break;
+    default:
+      break;
+  }
+}
+
 void processAnalogButtonArray(int index) {
   for (int btnIndex = 0; btnIndex < 4; btnIndex++) {
     int low  = sensorInfo[index].btnArray[btnIndex].resitor - sensorInfo[index].hysteresis;
@@ -741,6 +764,7 @@ void readDigitalSensor(int index) {
   if (sensorInfo[index].counter >= sensorInfo[index].debounceCount) {
     sensorInfo[index].counter = 0;
     sensorInfo[index].value = newSensorValue;
+    startActionOfDigitalButton(index);
   }
 }
 

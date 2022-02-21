@@ -25,7 +25,7 @@ A rest api is available.
 
 Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
 
-V 0.0.5 - Initial production version.
+V 0.0.6 - Digital Buttons.
 -------------------------------------
 
 Todo:
@@ -40,6 +40,8 @@ Todo:
 - ...
 
 Started:
+- Digital buttons: support for same functions as in analog button array
+- 
 
 Done:
 - adding documentation about the rest api.
@@ -65,4 +67,4 @@ Upload is as follow:
  A PCB layout is also designed in this.
 
  #housing
- In 3D-models, a openScad file with a generated stl file is added.
+ In 3D-models, an openScad file with a generated stl file is added.

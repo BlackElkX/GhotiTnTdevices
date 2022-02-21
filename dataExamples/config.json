@@ -85,9 +85,21 @@
   ],
   "sensors": [
     {
+      "pin": 15,
       "value": 0,
+      "debounceCount": 0,
+      "readDelay": 5,
       "name": "sensor1",
+      "pinName": "D8",
+      "type": "sDigital",
+      "digitalFunction": "bPower"
+    },
+    {
       "pin": 17,
+      "value": 0,
+      "debounceCount": 0,
+      "readDelay": 5,
+      "name": "sensor2",
       "pinName": "A0",
       "type": "sAnalogButtons",
       "hysteresis": 42,
@@ -98,8 +110,6 @@
       "multiplier": 1,
       "buttonIncrease": 5,
       "buttonDecrease": 5,
-      "readDelay": 5,
-      "debounceCount": 10,
       "buttonfunctions":["bPower", "bUp", "bDown", "bProgram"],
       "buttonValues": [10, 550, 730, 815]
     }

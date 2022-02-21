@@ -51,9 +51,13 @@ typedef struct {
   int pin;
   int value;
   int counter;
+  int debounceCount;
   String name;
   String pinName;
   sensorTypes type;
+  //digital specific
+  buttonTypes digitalFunction;
+  //all analog specific
   int hysteresis;
   int minValue;
   int maxValue;
@@ -61,9 +65,9 @@ typedef struct {
   int maxRemap;
   int multiplier;
   int readDelay;
+  //analog button array specific
   int btnArrayIncrease;
   int btnArrayDecrease;
-  int debounceCount;
   BtnArrayStruct btnArray[4];
 } SensorStruct;
 
