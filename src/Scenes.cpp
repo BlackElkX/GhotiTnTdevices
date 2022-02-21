@@ -47,47 +47,63 @@ void stopScene() {
   }
 }
 
+void processNewValue(int index) {
+  int value = outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms);
+  if (value <= 0) {
+    value = 0;
+    outputInfo[index].sceneDirection = 1;
+  }
+  if (value >= 255) {
+    value = 255;
+    outputInfo[index].sceneDirection = -1;
+  }
+  setOutputValue(index, value);
+}
+
 void allUpDown() {
   for (int index = 0; index < outputQuantity; index++) {
     checkFirstRun(index);
-    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
-    switchSceneDirection(index);
+    processNewValue(index);
   }
 }
 
 void allUpDownFollowing() {
   for (int index = 0; index < outputQuantity; index++) {
     checkFirstRunFollowing(index);
-    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
-    switchSceneDirection(index);
+    processNewValue(index);
   }
 }
 
 void allUpDownAlternating() {
   for (int index = 0; index < outputQuantity; index++) {
     checkFirstRunAlternating(index);
-    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
-    switchSceneDirection(index);
+    processNewValue(index);
   }
 }
 
 void oddUpDown() {
-  for (int index = 1; index < outputQuantity + 1; index + 2) {
-    int usedIndex = index;
-    if (usedIndex > outputQuantity) {
-      usedIndex = 0;
+  for (int index = 0; index < outputQuantity; index++) {
+    if ((index % 2) != 0) {
+      int usedIndex = index;
+      if (usedIndex >= outputQuantity) {
+        usedIndex = 0;
+      }
+      checkFirstRun(index);
+      processNewValue(index);
     }
-    checkFirstRun(index);
-    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
-    switchSceneDirection(index);
   }
 }
 
 void evenUpDown() {
-  for (int index = 0; index < outputQuantity; index + 2) {
-    checkFirstRun(index);
-    setOutputValue(index, outputInfo[index].value + (outputInfo[index].sceneDirection * sceneInfo.steps_ms));
-    switchSceneDirection(index);
+  for (int index = 0; index < outputQuantity; index++) {
+    if ((index % 2) == 0) {
+      int usedIndex = index;
+      if (usedIndex >= outputQuantity) {
+        usedIndex = 0;
+      }
+      checkFirstRun(index);
+      processNewValue(index);
+    }
   }
 }
 
@@ -109,12 +125,11 @@ void checkFirstRun(int index) {
 }
 
 void checkFirstRunFollowing(int index) {
-  if (index > 0) {
-    if (getOutput(index - 1).value > ((256 / sceneInfo.steps_ms) / (outputQuantity + 1))) {
-      checkFirstRun(index);
-    }
-  } else {
-    checkFirstRun(index);
+  if (outputInfo[index].sceneDirection == 0) {
+    setOutputSceneDir(index, 1);
+    int part = 256 / (outputQuantity);
+    int newValue = part * (index + 1);
+    setOutputValue(index, newValue);
   }
 }
 
@@ -122,15 +137,10 @@ void checkFirstRunAlternating(int index) {
   if (outputInfo[index].sceneDirection == 0) {
     if ((index % 2) != 0) {
       setOutputSceneDir(index, 1);
+      setOutputValue(index, 0);
     } else {
       setOutputSceneDir(index, -1);
+      setOutputValue(index, 255);
     }
-    setOutputValue(index, 0);
-  }
-}
-
-void switchSceneDirection(int index) {
-  if ((outputInfo[index].value >= 255) || (outputInfo[index].value <= 0)) {
-    outputInfo[index].sceneDirection = -outputInfo[index].sceneDirection;
   }
 }

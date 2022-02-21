@@ -9,11 +9,23 @@ A rest api is available.
 - I use IR540 mosfets to drive the led strips. They stay very cool, because they are overrated for these strips.
 - As source, the original 24V power suply is powerfull enough.
 - I use as development and debug a NodeMCU ESP8266 module.
-- As production boards, is used.
+- As production boards, D1 mini is used.
+- For the button array, I use 4x 10k ohm resistors, whish give on the NodeMCU
+   . values 10, 550, 730, 815
+   . a hysteresis of 42
+   . and maxvalue of 980
+  I did some tests, with other resistors, but 10k is the most stable
+   (dataExample/config.json is based on this tests)
+  on D1 mini its more accurate, hyst is lower and values are different
+  To calibrate, use serial console, uncomment Serial.println line in main::readAnalogSensor(...
+    Serial.println("old = " + String(oldValue) + " new = " + String(newValue) + " max = " + String(maxValue) + " min = " + String(minValue));
 
 Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
 
 Known bugs:
+
+V 0.0.5 - Initial production version
+Solved bugs:
 - programs not working except scnone, scAllUpDown and scRandom
 
 Todo:

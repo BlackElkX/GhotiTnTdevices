@@ -20,6 +20,5 @@ void allRandom();
 void checkFirstRun(int index);
 void checkFirstRunFollowing(int index);
 void checkFirstRunAlternating(int index);
-void switchSceneDirection(int index);
 
 #endif

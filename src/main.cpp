@@ -12,6 +12,8 @@
 #include <ESP8266mDNS.h>
 //#include "main.hpp"
 
+#define  VERSION_STRING "0.0.5"
+
 extern DebugStruct debugInfo;
 extern HtmlStruct  htmlInfo;
 extern SceneStruct sceneInfo;
@@ -44,6 +46,7 @@ void initiateValues() {
 void setupSerialDebug() {
   Serial.begin(115200);
   Serial.println("");
+  Serial.println("Version " + String(VERSION_STRING));
 }
 
 void setupWiFi() {
@@ -83,9 +86,9 @@ void handleNotFound() {
 }
 
 void setDebuging() {
-  Serial.print/*debugToSerial*/("set debugging to: ");
-  Serial.print/*debugToSerial*/(restSrv.argName(0));
-  Serial.print/*debugToSerial*/(restSrv.arg(0));
+  debugToSerial("set debugging to: ");
+  debugToSerial(restSrv.argName(0));
+  debugToSerial(restSrv.arg(0));
   String response = "{\"setDebug\":\"";
   if (restSrv.arg(0) == "ON") {
     setDebug(true);
@@ -97,7 +100,7 @@ void setDebuging() {
     response += "\", \"error\":\"" + restSrv.arg(0);
   }
   response += "\"}";
-  Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 }
 
@@ -106,7 +109,7 @@ String processOutput(String obj, String value) {
   for (int index = 0; index < outputQuantity; index++) {
     if (obj.equals(outputInfo[index].name)) {
       String request = "/" + obj + "=" + value;
-      Serial.println/*debugLineToSerial*/(request);
+      debugLineToSerial(request);
       String lValue = "ON";
       switch (outputInfo[index].type) {
         case oLED:
@@ -195,12 +198,12 @@ void setAllOffBtn() {
 }
 
 void setAllOff() {
-  //Serial.print/*debugToSerial*/("set all off: ");
+  debugToSerial("set all off: ");
   stopSceneNow();
   String response = "{\"outputs\":[";
 
   for (int index = 0; index < outputQuantity; index++) {
-    //Serial.print/*debugToSerial*/(outputInfo[index].name + " => " + outputInfo[index].value);
+    debugToSerial(outputInfo[index].name + " => " + outputInfo[index].value);
     String lValue = "0";
     if (outputInfo[index].type == oLED) {
       lValue = "OFF";
@@ -208,13 +211,13 @@ void setAllOff() {
     String result = processOutput(outputInfo[index].name, lValue);
     if (index > 0) {
       response += ", ";
-      //Serial.print/*debugToSerial*/(" - ");
+      debugToSerial(" - ");
     }
     response += result;
   }
 
   response += "]}";
-  //Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 }
 
@@ -228,18 +231,18 @@ void setAllHalfBtn() {
 }
 
 void setAllHalf() {
-  //Serial.print/*debugToSerial*/("set all half:");
+  debugToSerial("set all half:");
   stopSceneNow();
   String response = "{\"outputs\":[";
 
   int count = 0;
   for (int index = 0; index < outputQuantity; index++) {
     if (outputInfo[index].type == oPWM) {
-      //Serial.print/*debugToSerial*/(outputInfo[index].name + " => " + outputInfo[index].value);
+      debugToSerial(outputInfo[index].name + " => " + outputInfo[index].value);
       String result = processOutput(outputInfo[index].name, "127");
       if (count > 0) {
         response += ", ";
-        //Serial.print/*debugToSerial*/(" - ");
+        debugToSerial(" - ");
       }
       count++;
       response += result;
@@ -247,17 +250,17 @@ void setAllHalf() {
   }
     
   response += "]}";
-  //Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 }
 
 void setAllFull() {
-  //Serial.print/*debugToSerial*/("set all full:");
+  debugToSerial("set all full:");
   stopSceneNow();
   String response = "{\"outputs\":[";
 
   for (int index = 0; index < outputQuantity; index++) {
-    //Serial.println/*debugLineToSerial*/(outputInfo[index].name + " => " + outputInfo[index].value);
+    debugLineToSerial(outputInfo[index].name + " => " + outputInfo[index].value);
     String lValue = "255";
     if (outputInfo[index].type == oLED) {
       lValue = "ON";
@@ -265,13 +268,13 @@ void setAllFull() {
     String result = processOutput(outputInfo[index].name, lValue);
     if (index > 0) {
       response += ", ";
-      //Serial.print/*debugToSerial*/(" - ");
+      debugToSerial(" - ");
     }
     response += result;
   }
 
   response += "]}";
-  //Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 }
 
@@ -285,7 +288,6 @@ void setAllValueBtn(int amount) {
       if (newValue > 255) {
         newValue = 255;
       }
-      //Serial.println("output " + outputInfo[index].name + " old value [" + String(outputInfo[index].value) + "] + amount [" + String(amount) + "] = new value [" + String(newValue) + "]");
       analogWrite(outputInfo[index].pin, newValue);
       setOutputValue(index, newValue);
     }
@@ -373,11 +375,11 @@ void setNewScene() {
 }
 
 void setStepsScene() {
-  Serial.print/*debugToSerial*/("set scene steps to: ");
+  debugToSerial("set scene steps to: ");
   String response = "{\"extra\":[";
 
   int argCount = restSrv.args();
-  //Serial.println/*debugLineToSerial*/(argCount);
+  debugLineToSerial(argCount);
   String sceneName;
   for (int index = 0; index < argCount; index++) {
     if (restSrv.argName(index) == "steps") {
@@ -386,12 +388,12 @@ void setStepsScene() {
       response += "\"error\":\"wrong rest call: " + restSrv.argName(index) + " is not valid for setSceneSteps\"";
     }
   }
-  Serial.print/*debugToSerial*/(sceneName);
+  debugToSerial(sceneName);
 
   sceneTypes newscene = getSceneTypeFromName(sceneName);
   if (sceneInfo.active != newscene) {
     stopSceneNow();
-    Serial.print/*debugToSerial*/(" - selected scene = " + getSceneTypeName(newscene));
+    debugToSerial(" - selected scene = " + getSceneTypeName(newscene));
     sceneInfo.active = newscene;
     startScene();
   }
@@ -406,17 +408,17 @@ void setStepsScene() {
   response += String(sceneInfo.pause_ms);
   response += "\"}";
   response += "]}";
-  Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 
 }
 
 void setPauseScene() {
-  Serial.print/*debugToSerial*/("set scene pause to: ");
+  debugToSerial("set scene pause to: ");
   String response = "{\"extra\":[";
 
   int argCount = restSrv.args();
-  //Serial.println/*debugLineToSerial*/(argCount);
+  debugLineToSerial(argCount);
   String sceneName;
   for (int index = 0; index < argCount; index++) {
     if (restSrv.argName(index) == "name") {
@@ -427,11 +429,11 @@ void setPauseScene() {
       sceneInfo.pause_ms = restSrv.arg(index).toInt();
     }
   }
-  Serial.print/*debugToSerial*/(sceneName);
+  debugToSerial(sceneName);
   sceneTypes newscene = getSceneTypeFromName(sceneName);
   if (sceneInfo.active != newscene) {
     stopSceneNow();
-    Serial.print/*debugToSerial*/(" - selected scene = " + getSceneTypeName(newscene));
+    debugToSerial(" - selected scene = " + getSceneTypeName(newscene));
     sceneInfo.active = newscene;
     startScene();
   }
@@ -446,7 +448,7 @@ void setPauseScene() {
   response += String(sceneInfo.pause_ms);
   response += "\"}";
   response += "]}";
-  Serial.println/*debugLineToSerial*/(" => " + response);
+  debugLineToSerial(" => " + response);
   restSrv.send(200, "text/json", response);
 }
 
@@ -459,18 +461,15 @@ void startActionOfAnalogButton(int index, int btnIndex) {
         setAllHalfBtn();
       }
       break;
-    case bProgram:
-      //Serial.print("program - " + getSceneTypeName(sceneInfo.active));
-      //sceneTypes newScene = getNextSceneType(sceneInfo.active);
-      sceneInfo.active = getNextSceneType(sceneInfo.active);//newScene;
-      //Serial.print(" becomes " + getSceneTypeName(sceneInfo.active));
-      startScene();
-      break;
     case bUp:
       setAllValueBtn(sensorInfo[index].btnArrayIncrease);
       break;
     case bDown:
       setAllValueBtn(-sensorInfo[index].btnArrayDecrease);
+      break;
+    case bProgram:
+      sceneInfo.active = getNextSceneType(sceneInfo.active);
+      startScene();
       break;
     default:
       break;
@@ -482,19 +481,13 @@ void processAnalogButtonArray(int index) {
     int low  = sensorInfo[index].btnArray[btnIndex].resitor - sensorInfo[index].hysteresis;
     int high = sensorInfo[index].btnArray[btnIndex].resitor + sensorInfo[index].hysteresis;
     if ((sensorInfo[index].value > low) && (sensorInfo[index].value < high)) {
-//        Serial.print(sensorInfo[index].name + "-" + String(btnIndex + 1) + "  value read=" + String(sensorInfo[index].value) + " resistor="
-//        + String(sensorInfo[index].btnArray[btnIndex].resitor) + " low=" + String(low) + " high=" + String(high));
       if (!sensorInfo[index].btnArray[btnIndex].pressed) {
-//        Serial.print("    resistor between low and high");
-//        Serial.print("    button was not pressed, but now, it is");
         sensorInfo[index].btnArray[btnIndex].pressed = true;
         startActionOfAnalogButton(index, btnIndex);
       }
     } else {
-//      Serial.print("    button is set to not pressed");
       sensorInfo[index].btnArray[btnIndex].pressed = false;
     }
-//    Serial.println("");
   }
 }
 
@@ -756,6 +749,17 @@ void readAnalogSensor(int index) {
   int newValue = analogRead(sensorInfo[index].pin);
   int maxValue = oldValue + (sensorInfo[index].hysteresis / 2);
   int minValue = oldValue - (sensorInfo[index].hysteresis / 2);
+  if (maxValue > sensorInfo[index].maxValue) {
+    maxValue = sensorInfo[index].maxValue;
+  }
+  if (minValue > sensorInfo[index].maxValue) {
+    minValue = sensorInfo[index].maxValue - (sensorInfo[index].hysteresis / 2);
+  } else if (minValue < sensorInfo[index].minValue) {
+    minValue = sensorInfo[index].minValue;
+  }
+  if (newValue > sensorInfo[index].maxValue) {
+    newValue = sensorInfo[index].maxValue;
+  }
   if ((newValue < minValue) || (newValue > maxValue)) {
     oldValue = newValue;
     if ((newValue == sensorInfo[index].value)

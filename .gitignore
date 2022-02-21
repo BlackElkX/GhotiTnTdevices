@@ -33,6 +33,7 @@
 
 # Custom files
 data
+ownConfigs
 tests
 .DS_Store
 .pio

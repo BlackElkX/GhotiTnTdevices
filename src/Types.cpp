@@ -44,6 +44,9 @@ sceneTypes getNextSceneType(sceneTypes scene) {
   case scEvenUpDown:
     newScene = scAllRandom;
     break;
+  case scAllRandom:
+    newScene = scNone;
+    break;
   default:
     newScene = scAllUpDown;
     break;

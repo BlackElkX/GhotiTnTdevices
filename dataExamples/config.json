@@ -90,7 +90,7 @@
       "pin": 17,
       "pinName": "A0",
       "type": "sAnalogButtons",
-      "hysteresis": 30,
+      "hysteresis": 42,
       "minvalue": 0,
       "maxvalue": 1024,
       "minremap": 0,
