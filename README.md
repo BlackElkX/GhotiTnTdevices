@@ -28,9 +28,6 @@ Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PW
 V 0.0.5 - Initial production version.
 -------------------------------------
 
-Solved bugs:
-- programs not working except scnone, scAllUpDown and scRandom
-
 Todo:
 - a switch to disable wifi functionality (only when power is off, you can use it. If powered, the switch will not be checked)
 - a power switch (only on hardware level)
@@ -47,6 +44,7 @@ Started:
 Done:
 - adding documentation about the rest api.
 - 4 buttons using the A0 analog pin to use it stand-alone
+- Solved bugs in programs not working. except scnone, scAllUpDown and scRandom
 
 To build this, I use platformio in visual studio code on Mac, Linux and Windows.
 
@@ -61,3 +59,10 @@ Upload is as follow:
  6) in the platformio tab -> general -> Upload. (or below the screen, the ->)
  
  you can check the serial monitor if it is working and to get the ip address.
+
+ #Electronics
+ In the folder fritzing, you can find the file with the schema.
+ A PCB layout is also designed in this.
+
+ #housing
+ In 3D-models, a openScad file with a generated stl file is added.
