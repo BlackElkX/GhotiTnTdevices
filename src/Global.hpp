@@ -3,8 +3,6 @@
 #include <Arduino.h>
 #include <WString.h>
 
-//#pragma once
-
 bool getDebugPinState();
 void debugToSerial(const String message);
 void debugLineToSerial(const String message);

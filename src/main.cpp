@@ -11,7 +11,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-#define  VERSION_STRING "0.0.6"
+#define  VERSION_STRING "0.0.7"
 
 extern DebugStruct debugInfo;
 extern HtmlStruct  htmlInfo;
@@ -136,7 +136,7 @@ void getSceneNames() {
   debugToSerial("getting scene names");
   String response = "{\"scenes\":[";
   int index = 0;
-  for (sceneTypes scene = scAllUpDown; scene <= scNone; scene = sceneTypes(scene + 1)) {
+  for (sceneTypes scene = scNone; scene <= scProgSequence; scene = sceneTypes(scene + 1)) {
     if (index > 0) {
       response += ", ";
     }
@@ -728,6 +728,17 @@ void loopHTTPpage(WiFiClient client) {
   }
   htmlPageTableEnd(client);
   htmlPageEmptyLine(client);
+  String sequenceName = "";
+  if (sceneInfo.active == scProgSequence) {
+    sequenceName = getSceneTypeName(sceneInfo.sequence_active);
+  }
+  htmlSceneTitle(client, getSceneTypeName(sceneInfo.active), sequenceName);
+  for (sceneTypes scene = scNone; scene <= scProgSequence; scene = sceneTypes(scene + 1)) {
+    String sceneName = getSceneTypeName(scene);
+    htmlSceneLine(client, sceneName);
+  }
+  htmlPageTableEnd(client);
+  htmlPageEmptyLine(client);
 
   htmlPageBodyTableStart(client, "Sensors and buttons", 2, false, wifiInfo.httpRefreshRate);
   htmlSensorTitle(client);
@@ -789,12 +800,14 @@ void readAnalogSensor(int index) {
     if ((newValue == sensorInfo[index].value)
      && (sensorInfo[index].counter > 0)) {
       sensorInfo[index].counter--;
+      Serial.print("-");
      }
     if (newValue == sensorInfo[index].value) {
       sensorInfo[index].counter++;
+      Serial.print("+");
     }
     if (sensorInfo[index].counter >= sensorInfo[index].debounceCount) {
-//      Serial.println("old = " + String(oldValue) + " new = " + String(newValue) + " max = " + String(maxValue) + " min = " + String(minValue));
+      Serial.println("old = " + String(oldValue) + " new = " + String(newValue) + " max = " + String(maxValue) + " min = " + String(minValue));
       sensorInfo[index].counter = 0;
       sensorInfo[index].value = newValue;
       if (sensorInfo[index].type == sAnalogButtons) {
@@ -802,7 +815,11 @@ void readAnalogSensor(int index) {
         processAnalogButtonArray(index);
       } else {
         //process value from sensor
+        int mappedValue = map(sensorInfo[index].value, sensorInfo[index].minValue, sensorInfo[index].maxValue, sensorInfo[index].minRemap, sensorInfo->maxRemap);
+        Serial.println(String(newValue) + " remaped to " + String(mappedValue));
       }
+    } else {
+      Serial.print(".");
     }
   }
 }
@@ -834,7 +851,13 @@ void loopHTTPBoardOutputs(String request) {
         break;
     }
   }
-
+  sceneTypes newscene = processScene(request);
+  if (newscene != sceneInfo.active) {
+    stopSceneNow();
+    debugToSerial(" - selected scene = " + getSceneTypeName(newscene));
+    sceneInfo.active = newscene;
+    startScene();
+  }
   wifiInfo.httpRefreshRate = processRefresh(request, wifiInfo.httpRefreshRate);
 }
 

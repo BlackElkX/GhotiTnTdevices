@@ -5,8 +5,6 @@
 #include <WString.h>
 #include "Types.hpp"
 
-//#pragma once
-
 typedef struct {
   int    pin;
   String pinName;
@@ -21,8 +19,11 @@ typedef struct {
 
 typedef struct {
   sceneTypes active;
-  int steps_ms;
-  int pause_ms;
+  int  steps_ms;
+  int  pause_ms;
+  long sequence_ms;
+  long sequence_timestamp;
+  sceneTypes sequence_active;
 } SceneStruct;
 
 typedef struct {

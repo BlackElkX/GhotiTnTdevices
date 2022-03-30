@@ -1,9 +1,6 @@
 #include <ArduinoJson.h>
-//#include "Variables.hpp"
-//#include "Types.hpp"
 #include "Structures.hpp"
 
-//JsonObject configJson;
 DebugStruct  debugInfo;
 HtmlStruct   htmlInfo;
 SceneStruct  sceneInfo;

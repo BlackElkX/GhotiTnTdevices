@@ -1,5 +1,5 @@
 #include "Types.hpp"
-#include "scenes.hpp"
+#include "Scenes.hpp"
 #include "Global.hpp"
 #include "Types.hpp"
 #include "PersistentSettings.hpp"
@@ -8,11 +8,13 @@ extern SceneStruct sceneInfo;
 extern int outputQuantity;
 extern OutputStruct outputInfo[USED_OUTPUT_QTY];
 
-//#pragma once
-
 void startScene() {
   stopScene();
-  nextStepInScene();
+  if (sceneInfo.active == scProgSequence) {
+    startSceneSequence();
+  } else {
+    nextStepInScene();
+  }
 }
 
 void nextStepInScene() {
@@ -35,6 +37,9 @@ void nextStepInScene() {
     case scAllUpDown:
       allUpDown();
       break;
+    case scProgSequence:
+      nextStepInSceneSequence();
+      break;
     default:
       break;
   }
@@ -44,6 +49,44 @@ void stopScene() {
   for (int index = 0; index < outputQuantity; index++) {
     setOutputValue(index, 0);
     setOutputSceneDir(index, 0);
+  }
+}
+
+void startSceneSequence() {
+    sceneInfo.sequence_timestamp = millis();
+    sceneInfo.sequence_active    = scAllUpDown;
+    nextStepInSceneSequence();
+}
+
+void nextStepInSceneSequence() {
+  long newTimestamp = millis();
+  if ((sceneInfo.sequence_timestamp + sceneInfo.sequence_ms) < newTimestamp) {
+    stopScene();
+    sceneTypes newSceneSequence  = getNextSceneSequence(sceneInfo.sequence_active);
+    sceneInfo.sequence_active    = newSceneSequence;
+    sceneInfo.sequence_timestamp = newTimestamp;
+  }
+  switch (sceneInfo.sequence_active) {
+    case scAllUpDown:
+      allUpDown();
+      break;
+    case scAllUpDownFollowing:
+      allUpDownFollowing();
+      break;
+    case scAllUpDownAlternating:
+      allUpDownAlternating();
+      break;
+    case scOddUpDown:
+      oddUpDown();
+      break;
+    case scEvenUpDown:
+      evenUpDown();
+      break;
+    case scAllRandom:
+      allRandom();
+      break;
+    default:
+      break;
   }
 }
 

@@ -1,8 +1,7 @@
 #include <WString.h>
 #include <Arduino.h>
 #include "Global.hpp"
-
-//#pragma once
+#include "Types.hpp"
 
 int processLED(String request, String obj, int iValue, int iLed) {
   int aValue = iValue;
@@ -41,4 +40,14 @@ int processRefresh(String request, int arefreshrate) {
     result = 0;
   }
   return result;
+}
+
+sceneTypes processScene(String request) {
+  sceneTypes sceneType = scNone;
+  if (request.indexOf("GET /scene=") != -1) {
+    String newScene1 = request.substring(request.indexOf("GET /scene=") + 11);
+    String newScene2 = newScene1.substring(0, newScene1.indexOf(" "));
+    sceneType = getSceneTypeFromName(newScene2);
+  }
+  return sceneType;
 }

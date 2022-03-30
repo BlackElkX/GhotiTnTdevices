@@ -6,8 +6,6 @@
 #include "Types.hpp"
 #include "Structures.hpp"
 
-//#pragma once
-
 bool         readConfig();
 bool         saveConfig(JsonObject& configJson);
 void         printConfig();

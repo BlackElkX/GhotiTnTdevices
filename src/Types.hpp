@@ -3,15 +3,15 @@
 
 #include <WString.h>
 
-enum sceneTypes  {scAllUpDown, scAllUpDownFollowing, scAllUpDownAlternating, scOddUpDown, scEvenUpDown, scAllRandom, scNone};
-enum outputTypes {oLED, oPWM, oNone};
-enum sensorTypes {sDigital, sAnalog, sAnalogButtons, sNone};
-enum buttonTypes {bPower, bUp, bDown, bProgram, bNone};
+enum sceneTypes  {scNone, scAllUpDown, scAllUpDownFollowing, scAllUpDownAlternating, scOddUpDown, scEvenUpDown, scAllRandom, scProgSequence};
+enum outputTypes {oNone, oLED, oPWM};
+enum sensorTypes {sNone, sDigital, sAnalog, sAnalogButtons};
+enum buttonTypes {bNone, bPower, bUp, bDown, bProgram};
 
 String      getSceneTypeName(sceneTypes scene);
 sceneTypes  getSceneTypeFromName(String  name);
 sceneTypes  getNextSceneType(sceneTypes scene);
-
+sceneTypes  getNextSceneSequence(sceneTypes scene);
 
 String      getOutputTypeName(outputTypes outputType);
 outputTypes getOutputTypeFromName(String  name);

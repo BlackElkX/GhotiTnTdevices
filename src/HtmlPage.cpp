@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
-//#pragma once
-
 void htmlPageStart(WiFiClient client) {
   client.println("HTTP/1.1 200 OK"); //
   client.println("Content-Type: text/html");
@@ -93,6 +91,26 @@ void htmlSensorLine(WiFiClient client, String obj, int value) {
   client.println("      <tr>");
   client.println("        <td>" + obj + "</td>");
   client.println("        <td>" + String(value) + "</td>");
+  client.println("      </tr>");
+}
+
+void htmlSceneTitle(WiFiClient client, String activeScene, String subSceneName) {
+  client.println("    <table border=1>");
+  client.println("      <tr>");
+  client.print("        <th colspan=8 align='center'>Active scene is " + activeScene);
+  if (subSceneName != "") {
+    client.print(" with " + subSceneName + " as the running one.");
+  }
+  client.println("</th>");
+  client.println("      </tr>");
+  client.println("      <tr>");
+}
+
+void htmlSceneLine(WiFiClient client, String sceneName) {
+  client.println("        <td><a href='/scene=" + sceneName + "'><button>" + sceneName + "</button></a></td>");
+}
+
+void htmlSceneTableEnd(WiFiClient client) {
   client.println("      </tr>");
 }
 

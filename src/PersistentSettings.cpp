@@ -98,9 +98,10 @@ String getDeviceName() {
 
 SceneStruct getScene() {
   SceneStruct scenestruct;
-  scenestruct.active   = getSceneTypeFromName(configJson["scene"]["active"]);
-  scenestruct.steps_ms = configJson["scene"]["steps_ms"];
-  scenestruct.pause_ms = configJson["scene"]["pause_ms"];
+  scenestruct.active      = getSceneTypeFromName(configJson["scene"]["active"]);
+  scenestruct.steps_ms    = configJson["scene"]["steps_ms"];
+  scenestruct.pause_ms    = configJson["scene"]["pause_ms"];
+  scenestruct.sequence_ms = configJson["scene"]["sequence_ms"];
   return scenestruct;
 }
 

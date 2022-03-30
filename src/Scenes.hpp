@@ -4,11 +4,12 @@
 #include <WString.h>
 #include "Types.hpp"
 
-//#pragma once
-
 void startScene();
 void nextStepInScene();
 void stopScene();
+
+void startSceneSequence();
+void nextStepInSceneSequence();
 
 void allUpDown();
 void allUpDownFollowing();

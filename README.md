@@ -25,7 +25,7 @@ A rest api is available.
 
 Even Tasmota mentioned this board only suport up to 5 PWM channels, driving 6 PWM channels is not a problem.
 
-V 0.0.6 - Digital Buttons.
+V 0.0.7 - More scenes.
 -------------------------------------
 
 Todo:
@@ -35,18 +35,18 @@ Todo:
 - saving the config into the config.json file, from code.
 - split up the values of the sensors and the outputs in different json files, in stead of the config.json file.
 - a secure connection
-- a decent web ui
 - checking memory usage
 - ...
 
 Started:
+- a decent web ui
 - Digital buttons: support for same functions as in analog button array
-- 
 
 Done:
 - adding documentation about the rest api.
 - 4 buttons using the A0 analog pin to use it stand-alone
 - Solved bugs in programs not working. except scnone, scAllUpDown and scRandom
+- platformio.ini: add default port
 
 To build this, I use platformio in visual studio code on Mac, Linux and Windows.
 
@@ -68,3 +68,21 @@ Upload is as follow:
 
  #housing
  In 3D-models, an openScad file with a generated stl file is added.
+
+ #Change log
+
+ 0.0.7: More Scenes
+        - Added a demo scene, whish loops over all scenes.
+        - Changed the order of the types: #None is the first in the list now.
+        - Added scene table on HTML-page
+        - Added default monitor port in platformio.ini
+
+ 0.0.6: Digital Buttons
+        provided the same button functions for digital inputs as analog buttons.
+
+ 0.0.5: Analog Buttons
+        Using the analog input with an array of buttons with a resistor network, up to 4 functions are usable:
+        1 power on/off
+        2 dimming up
+        3 dimming down
+        4 scene selection (loop over all scenes)
