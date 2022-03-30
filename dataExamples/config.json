@@ -3,7 +3,8 @@
   "scene": {
     "active": "csNone",
     "steps_ms": 5,
-    "pause_ms": 100
+    "pause_ms": 100,
+    "sequence_ms": 30000
   },
   "debug": {
     "pin": 16,
